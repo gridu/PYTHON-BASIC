@@ -10,3 +10,6 @@ Add following points here:
 Here should be all steps which should be done before starting of learning:
 - creation git repo
 - adding professor to repo
+
+TODO:
+- move test section after Python core
