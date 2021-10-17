@@ -1,0 +1,4 @@
+- https://realpython.com/python-concurrency/
+- https://realpython.com/intro-to-python-threading/#conclusion-threading-in-python
+- https://docs.python.org/3/library/multiprocessing.html
+- https://docs.python.org/3/library/threading.html
