@@ -1,0 +1,4 @@
+- https://docs.python.org/3/tutorial/inputoutput.html
+- https://docs.python.org/3/tutorial/modules.html
+- https://docs.python.org/3/tutorial/errors.html
+- https://docs.python.org/3/tutorial/classes.html

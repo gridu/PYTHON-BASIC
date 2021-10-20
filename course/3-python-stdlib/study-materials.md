@@ -1,0 +1,4 @@
+- https://realpython.com/what-is-pip/
+- https://realpython.com/pypi-publish-python-package/
+- https://realpython.com/python-virtual-environments-a-primer/
+- https://realpython.com/effective-python-environment/
