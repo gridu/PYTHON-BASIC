@@ -15,3 +15,10 @@ from datetime import datetime
 
 def calculate_days(from_date: str) -> int:
     ...
+
+
+"""
+Write tests for calculate_days function
+Note that all tests should pass regardless of the day test was run
+Tip: for mocking datetime.now() use https://pypi.org/project/pytest-freezegun/
+"""

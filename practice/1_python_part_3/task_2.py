@@ -14,3 +14,8 @@ import math
 
 def math_calculate(function: str, *args):
     ...
+
+
+"""
+Write tests for math_calculate function
+"""
