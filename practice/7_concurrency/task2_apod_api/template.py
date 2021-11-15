@@ -3,8 +3,8 @@ APOD_ENDPOINT = 'https://api.nasa.gov/planetary/apod'
 OUTPUT_IMAGES = './output'
 
 
-def get_apod_metadata(start_date: str, end_date: str, api_key: str):
-    return []
+def get_apod_metadata(start_date: str, end_date: str, api_key: str) -> list:
+    pass
 
 
 def download_apod_images(metadata: list):
