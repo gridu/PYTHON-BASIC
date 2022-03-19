@@ -13,4 +13,13 @@ from typing import Dict
 
 
 def set_to_dict(dict_to_update: Dict[str, int], **items_to_set) -> Dict:
-    ...
+    for i in items_to_set:
+        if i in dict_to_update.keys():
+            if items_to_set[i] > dict_to_update[i]:
+                dict_to_update[i] = items_to_set[i]
+    return dict_to_update
+
+
+set_to_dict({'a': 1, 'b': 2, 'c': 3}, a=0, b=4)
+set_to_dict({}, a=0)  # no condition in the task to be {a: 0}
+set_to_dict({'a': 5})
