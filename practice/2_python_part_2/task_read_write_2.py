@@ -35,7 +35,4 @@ def fill():
 
     with open('new2.txt', 'w',encoding='CP1252') as new2:
         for w in words_revers:
-            new2.write(w + '\n')
-
-
-fill()
+            new2.write(w + ',')
