@@ -15,11 +15,30 @@ Example:
 """
 
 import argparse
+from faker  import Faker
+from unittest.mock import patch
+import pytest
 
 
-def print_name_address(args: argparse.Namespace) -> None:
-    ...
+def test_print_name_adress(capsys):
+    with patch("sys.argv", ['task_4.py', '-r', '10', '-f', 'address', 'name']):
+        print_name_address()
+    captured = capsys.readouterr()
+    with pytest.raises(AssertionError):
+        assert captured.out == 'something'
 
+
+def print_name_address():
+    parser = argparse.ArgumentParser(description='Create dictionaries with names and other data')
+    parser.add_argument('-r', '--rows', type=int, required=True, help='Number of dictionaries to create')
+    parser.add_argument('-f', '--fakers', type=str, required=True, help='Set types of faker', nargs='+')
+    args = parser.parse_args()
+    fake = Faker()
+    fake_name = getattr(fake, args.fakers[1])
+    fake_adress = getattr(fake, args.fakers[0])
+    for i in range(args.rows):
+        dictionary = dict(some_name=fake_name(), some_adress=fake_adress())
+        print(dictionary)
 
 """
 Write test for print_name_address function
