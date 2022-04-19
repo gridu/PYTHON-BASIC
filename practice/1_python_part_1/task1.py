@@ -13,6 +13,30 @@ Examples:
 """
 from typing import List, Any
 
-
 def delete_from_list(list_to_clean: List, item_to_delete: Any) -> List:
-    ...
+    print("lista wejściowa: ", list_to_clean)
+    print("element do usunięcia: ",item_to_delete)
+    #musimy sprawdzic czy element znajduje sie w liscie 
+    #by zadzialala funkcja pop potrzebujemy indeks elementu
+    
+    if item_to_delete in list_to_clean:
+      while item_to_delete in list_to_clean:
+          #print(list_to_clean)
+          wystapienia = list_to_clean.count(item_to_delete)
+          #print("element nalezy do listy")
+          pozycja = list_to_clean.index(item_to_delete)
+          #print("element do usuniecia pojawil sie w liscie wejsciowej ",wystapienia," razy")
+          #print("Pierwszy na pozycji ",pozycja)
+          list_to_clean.pop(pozycja)
+      print("lista wyjściowa :")
+      print(list_to_clean)
+
+   
+      
+    else:
+        print("Element do usunięcia nie znajdował się na liście")
+        print(list_to_clean)
+  
+    
+
+        
