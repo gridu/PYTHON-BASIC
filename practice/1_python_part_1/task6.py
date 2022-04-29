@@ -20,5 +20,13 @@ from typing import Tuple
 
 
 def get_min_max(filename: str) -> Tuple[int, int]:
-    ...
+    list = []
+    
+    with open(filename) as opened_file:
+        for line in opened_file:
+            list.append(int(line.strip()))
+    tuple = (min(list), max(list))
+    return tuple
+
+print(get_min_max('task6.txt'))
 
