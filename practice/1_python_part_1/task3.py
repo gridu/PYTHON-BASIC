@@ -30,4 +30,4 @@ def build_from_unique_words(*lines: Iterable[str], word_number: int) -> str:
             result += z[word_number] + ' '
     return result
 
-print(build_from_unique_words('1 2', '1 2 3', word_number=10))
+print(build_from_unique_words('a b c', '1 1 1 2 3', 'cat dog milk', word_number=1))

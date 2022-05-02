@@ -17,4 +17,5 @@ def set_to_dict(dict_to_update: Dict[str, int], **items_to_set) -> Dict:
         if (key not in dict_to_update) or (value > dict_to_update[key]):
             dict_to_update[key] = value
     return dict_to_update
+    
 print(set_to_dict({'a': 1, 'b': 2, 'c': 3}, a=0, b=4))
