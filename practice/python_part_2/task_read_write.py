@@ -15,15 +15,18 @@ Example:
 """
 import os
 
-path_to_files = "practice/2_python_part_2/files"
-files = os.listdir(path_to_files)
-values = []
 
-for file in sorted(files, key=lambda x: int(os.path.splitext(x)[0][5:])):
-    with open(os.path.join(path_to_files, file), 'r') as f:
-        for line in f:
-            values.append(line.rstrip())
-            
+def read_write(path_to_files, path_to_result):
+    files = os.listdir(path_to_files)
+    values = []
 
-with open("practice/2_python_part_2/result.txt", 'w') as f:
-    f.write(', '.join(values))
+    for file in sorted(files, key=lambda x: int(os.path.splitext(x)[0][5:])):
+        with open(os.path.join(path_to_files, file), 'r') as f:
+            for line in f:
+                values.append(line.rstrip())
+                
+
+    with open(path_to_result, 'w') as f:
+        f.write(', '.join(values))
+
+read_write("practice/python_part_2/files", "practice/python_part_2/result.txt")
