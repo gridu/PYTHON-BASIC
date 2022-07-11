@@ -11,6 +11,10 @@ Examples:
 """
 from typing import Dict
 
-
 def set_to_dict(dict_to_update: Dict[str, int], **items_to_set) -> Dict:
-    ...
+    for k,v in dict_to_update.items():
+        for k1,v1 in items_to_set.items():
+            if k==k1:
+                if v1>v:
+                    dict_to_update[k]=v1
+    return dict_to_update
