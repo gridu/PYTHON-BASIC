@@ -20,5 +20,8 @@ from typing import Tuple
 
 
 def get_min_max(filename: str) -> Tuple[int, int]:
-    ...
-
+    
+    with open(filename,'r') as f:
+        numbers=f.read().split()
+           
+    return (min(numbers),max(numbers))
