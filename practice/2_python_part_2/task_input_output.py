@@ -16,8 +16,32 @@ Examples:
 
 """
 
+def check(input):
+    try:
+        val=int(input)
+        return True
+    except ValueError:
+         return False
 
 def read_numbers(n: int) -> str:
-    ...
+
+    i=0
+    numbers=[]
+
+    while i < n:
+      
+       input1=input("Enter number: ")
+       if check(input1):
+        num=int(input1)
+        numbers.append(num)
+       i=i+1
+       
+    
+    if len(numbers)==0:
+            return "No numbers entered!"
+    else:
+            a=sum(numbers)/len(numbers)
+            return "Avg is: ",a
 
 
+print(read_numbers(5))
