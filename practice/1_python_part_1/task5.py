@@ -13,4 +13,15 @@ Examples:
 
 
 def remove_duplicated_words(line: str) -> str:
-    ...
+    words = line.split()
+    list_of_words = []
+    final_line = ""
+    if words:
+        for word in words:
+            if word not in list_of_words:
+                list_of_words.append(word)
+                final_line += " " + word
+
+    return final_line[1:]
+
+

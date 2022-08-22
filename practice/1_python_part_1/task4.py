@@ -10,4 +10,11 @@ from typing import List
 
 
 def calculate_power_with_difference(ints: List[int]) -> List[int]:
-    ...
+    final_list = []
+    if ints:
+        final_list.append(ints[0] ** 2)
+        for i in range(1, len(ints)):
+            final_list.append(ints[i] ** 2 - (ints[i-1] ** 2 - ints[i-1]))
+
+    return final_list
+
