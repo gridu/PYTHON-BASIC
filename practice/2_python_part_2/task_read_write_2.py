@@ -22,3 +22,26 @@ def generate_words(n=20):
         words.append(word)
 
     return words
+
+
+words = generate_words()
+file1 = open("file1.txt", 'w', encoding='utf-8')
+file2 = open("file2.txt", 'w', encoding='cp1252')
+
+first = True
+
+for word in words:
+    if first:
+        file1.write(word)
+        first = False
+    else:
+        file1.write("\\n" + word)
+
+first = True
+for word in words[::-1]:
+    if first:
+        file2.write(word)
+        first = False
+    else:
+        file2.write("," + word)
+

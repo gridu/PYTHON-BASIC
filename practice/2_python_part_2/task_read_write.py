@@ -13,3 +13,10 @@ Example:
 
     result.txt(content: "23, 78, 3")
 """
+final_str = ""
+for i in range(1, 21):
+    file = open("files/file_"+str(i)+".txt", 'r')
+    content = file.readline()
+    final_str += ", " + content
+file = open("files/result.txt", 'w')
+file.write(final_str[2:])
