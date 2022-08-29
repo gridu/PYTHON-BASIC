@@ -20,7 +20,7 @@ Examples:
 def read_numbers(n: int) -> str:
     sum_numbers, counter = 0, 0
     for i in range(n):
-        input_txt = input()
+        input_txt = str(input())
         if input_txt.isdigit():
             sum_numbers += int(input_txt)
             counter += 1

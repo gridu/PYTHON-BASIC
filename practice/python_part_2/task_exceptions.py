@@ -22,15 +22,12 @@ class DivisionByOneException(Exception):
 
 
 def division(x: int, y: int) -> typing.Union[None, int]:
-    try:
-        if y == 0:
-            print("Division by 0\nDivision finished")
-            return None
-        elif y == 1:
-            raise DivisionByOneException
-        else:
-            print("Division finished")
-            return int(x / y)
-    except DivisionByOneException:
+    if y == 0:
+        print("Division by 0\nDivision finished")
+        return None
+    elif y == 1:
         print("Division finished")
-        print("DivisionByOneException(\"Deletion on 1 get the same result\")")
+        raise DivisionByOneException("Deletion on 1 get the same result")
+    else:
+        print("Division finished")
+        return int(x / y)
