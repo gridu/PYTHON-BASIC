@@ -3,7 +3,7 @@ There is a list of most active Stocks on Yahoo Finance https://finance.yahoo.com
 You need to compose several sheets based on data about companies from this list.
 To fetch data from webpage you can use requests lib. To parse html you can use beautiful soup lib or lxml.
 Sheets which are needed:
-1. 5 stocks with most youngest CEOs and print sheet to output. You can find CEO info in Profile tab of concrete stock.
+1. 5 stocks with the youngest CEOs and print sheet to output. You can find CEO info in Profile tab of concrete stock.
     Sheet's fields: Name, Code, Country, Employees, CEO Name, CEO Year Born.
 2. 10 stocks with best 52-Week Change. 52-Week Change placed on Statistics tab.
     Sheet's fields: Name, Code, 52-Week Change, Total Cash

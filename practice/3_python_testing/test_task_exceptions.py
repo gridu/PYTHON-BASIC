@@ -26,6 +26,6 @@ def test_division_by_zero(capfd):
 
 
 def test_division_by_one(capfd):
-    with pytest.raises(Exception):
+    with pytest.raises(te.DivisionByOneException):
         x = te.division(1, 1)
 

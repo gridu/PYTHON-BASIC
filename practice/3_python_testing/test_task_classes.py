@@ -5,6 +5,7 @@ Also check corner-cases, for example if homework number of days is negative.
 """
 import datetime
 import unittest
+from unittest.mock import patch
 from python_part_2 import task_classes as tc
 
 
@@ -44,15 +45,16 @@ class TestClasses(unittest.TestCase):
 
     def test_homework_deadline(self):
         self.assertTrue(
-            self.homework1.deadline.strftime("%Y-%m-%d %H:%M") ==
-            (self.homework1.created + datetime.timedelta(3)).strftime("%Y-%m-%d %H:%M") and
-            self.homework2.deadline.strftime("%Y-%m-%d %H:%M") ==
-            (self.homework2.created + datetime.timedelta(-13)).strftime("%Y-%m-%d %H:%M")
+            self.homework1.deadline ==
+            (self.homework1.created + datetime.timedelta(3)).replace(hour=0, minute=0, second=0, microsecond=0) and
+            self.homework2.deadline ==
+            (self.homework2.created + datetime.timedelta(-13)).replace(hour=0, minute=0, second=0, microsecond=0)
         )
 
-    def test_student_doing_homework(self):
+    @patch('builtins.print')
+    def test_student_doing_homework(self, mock_print):
         self.assertIsNotNone(self.student1.do_homework(self.homework1))
-        self.assertIsNone(self.student1.do_homework(self.homework2))
+        self.assertIsNone(self.student2.do_homework(self.homework2))
 
     def test_is_active_homework(self):
         self.assertTrue(self.homework1.is_active())

@@ -36,7 +36,8 @@ class Teacher:
 
     def create_homework(self, text: str, number_of_days: int) -> 'Homework':
         current_datetime = datetime.datetime.now()
-        homework = Homework(text, current_datetime + datetime.timedelta(number_of_days))
+        homework = Homework(text, (current_datetime + datetime.timedelta(number_of_days))
+                            .replace(hour=0, minute=0, second=0, microsecond=0))
         return homework
 
 
