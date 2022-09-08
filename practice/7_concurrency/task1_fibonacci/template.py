@@ -62,5 +62,5 @@ if __name__ == '__main__':
     if not os.path.exists(OUTPUT_DIR):
         os.makedirs(OUTPUT_DIR)
 
-    func1(array=[randint(1000, 100000) for _ in range(1000)])
+    func1(array=[randint(4, 1000) for _ in range(1000)])
     func2(result_file=RESULT_FILE)
