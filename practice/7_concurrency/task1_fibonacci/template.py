@@ -35,7 +35,7 @@ def func1(array: list):
         os.remove(os.path.join(OUTPUT_DIR, file))
 
     st = time.time()
-    with concurrent.futures.ThreadPoolExecutor(max_workers=1000) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=40) as executor:
         executor.map(create_file, array, array_fib)
     end = time.time()
     print(end-st)
@@ -52,7 +52,7 @@ def open_and_write_to_csv(filename: str):
 def func2(result_file: str):
     files = os.listdir(OUTPUT_DIR)
     st = time.time()
-    with concurrent.futures.ThreadPoolExecutor(max_workers=1000) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=40) as executor:
         executor.map(open_and_write_to_csv, files)
     end = time.time()
     print(end - st)
