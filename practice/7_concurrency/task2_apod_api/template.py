@@ -92,7 +92,7 @@ def download_apod_images(metadata: list):
 
 def main():
     metadata = get_apod_metadata(
-        start_date='2021-09-01',
+        start_date='2021-09-20',
         end_date='2021-09-30',
         api_key=API_KEY, #multiprocess=True
     )
