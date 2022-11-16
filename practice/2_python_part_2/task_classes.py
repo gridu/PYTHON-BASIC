@@ -28,33 +28,54 @@ PEP8 comply strictly.
 import datetime
 
 
-class Teacher:
-    ...
+class Homework:
+    def __init__(self, tasks: str, number: int):
+        self.text = tasks
+        self.created = datetime.datetime.now()
+        self.deadline = datetime.timedelta(number)
+
+    def is_active(self) -> bool:
+        return self.deadline + self.created > datetime.datetime.now()
 
 
 class Student:
-    ...
+    def __init__(self, last_name: str, first_name: str):
+        self.last_name = last_name
+        self.first_name = first_name
+
+    @staticmethod
+    def do_homework(homework: Homework) -> any:
+        if not homework.is_active():
+            print('You are late')
+            return None
+        return homework
 
 
-class Homework:
-    ...
+class Teacher:
+    def __init__(self, last_name: str, first_name: str):
+        self.last_name = last_name
+        self.first_name = first_name
+
+    @staticmethod
+    def create_homework(text: str, number: int) -> Homework:
+        return Homework(text, number)
 
 
 if __name__ == '__main__':
     teacher = Teacher('Dmitry', 'Orlyakov')
     student = Student('Vladislav', 'Popov')
-    teacher.last_name  # Daniil
-    student.first_name  # Petrov
+    print(teacher.last_name)  # Daniil
+    print(student.first_name)  # Petrov
 
     expired_homework = teacher.create_homework('Learn functions', 0)
-    expired_homework.created  # Example: 2019-05-26 16:44:30.688762
-    expired_homework.deadline  # 0:00:00
-    expired_homework.text  # 'Learn functions'
+    print(expired_homework.created)  # Example: 2019-05-26 16:44:30.688762
+    print(expired_homework.deadline)  # 0:00:00
+    print(expired_homework.text)  # 'Learn functions'
 
     # create function from method and use it
     create_homework_too = teacher.create_homework
     oop_homework = create_homework_too('create 2 simple classes', 5)
-    oop_homework.deadline  # 5 days, 0:00:00
+    print(oop_homework.deadline)  # 5 days, 0:00:00
 
     student.do_homework(oop_homework)
     student.do_homework(expired_homework)  # You are late
