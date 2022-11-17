@@ -18,6 +18,17 @@ Examples:
 
 
 def read_numbers(n: int) -> str:
-    ...
+    numbers = []
+    for _ in range(n):
+        try:
+            numbers.append(float(input()))
+        except ValueError:
+            pass
+    if len(numbers) == 0:
+        return 'No numbers entered'
+    avg = round(sum(numbers) / len(numbers), 2)
+    return f'Avg: {avg}, where {avg} is avg value which rounded to 2 places after the decimal'
 
 
+if __name__ == '__main__':
+    print(read_numbers(5))
