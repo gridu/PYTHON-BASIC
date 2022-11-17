@@ -12,5 +12,8 @@ Examples:
 """
 
 
+from task3 import unique_list
+
+
 def remove_duplicated_words(line: str) -> str:
-    ...
+    return ' '.join(unique_list(line.split()))

@@ -8,7 +8,6 @@ TIP: to test output of print() function use capfd fixture
 https://stackoverflow.com/a/20507769
 """
 
-
 def test_division_ok(capfd):
     ...
 

@@ -23,8 +23,8 @@ def unpack_data():
     return data_from_files
 
 
-def load_data(data_from_files):
-    with open('./files/result.txt', 'w') as g:
+def load_data(data_from_files, path='./files/result.txt'):
+    with open(path, 'w') as g:
         for number, word in enumerate(data_from_files):
             if number != 19:
                 g.write(word + ', ')
