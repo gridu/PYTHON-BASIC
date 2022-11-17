@@ -13,3 +13,13 @@ Example:
 
     result.txt(content: "23, 78, 3")
 """
+data_from_files = []
+for i in range(1, 21):
+    with open(f'./files/file_{i}.txt', 'r') as f:
+        data_from_files.append(f.readline().rstrip('\n'))
+with open('./files/result.txt', 'w') as g:
+    for number, word in enumerate(data_from_files):
+        if number != 19:
+            g.write(word + ', ')
+        else:
+            g.write(word)
