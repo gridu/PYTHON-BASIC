@@ -4,26 +4,23 @@ To write files during tests use temporary files:
 https://docs.python.org/3/library/tempfile.html
 https://docs.pytest.org/en/6.2.x/tmpdir.html
 """
-from task_read_write import unpack_data, load_data
-import tempfile, unittest
+from tasks.task_read_write import unpack_data, load_data
+import tempfile, pytest
 
 
-class Test(unittest.TestCase):
-    def SetUp(self):
-        self.data = unpack_data()
-
-    def test_unpack_data(self):
-        for i in range(1, 21):
-            with open(f'./files/file_{i}.txt', 'r') as f:
-                self.assertEqual(self.data[i - 1], f.readline().rstrip('\n'))
-
-    def test_load_data(self):
-        check = tempfile.NamedTemporaryFile()
-        load_data(self.data, check.name)
-        data_to_check = []
-        with open(check.name, 'r') as g:
-            data_to_check.append(g.read().split(','))
-        self.assertEqual(self.data, data_to_check)
+@pytest.fixture
+def data():
+    return unpack_data()
 
 
+def test_unpack_data(data):
+    for i in range(1, 21):
+        with open(f'./files/file_{i}.txt', 'r') as f:
+            assert f.readline() == data[i - 1]
 
+
+def test_load_data(data):
+    file = tempfile.NamedTemporaryFile()
+    load_data(data, file.name)
+    with open(file.name) as f:
+        assert data == f.readline().split(',')

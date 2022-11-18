@@ -4,7 +4,7 @@ Check if all methods working correctly.
 Also check corner-cases, for example if homework number of days is negative.
 """
 
-from task_classes import *
+from tasks.task_classes import *
 import unittest
 
 class Test(unittest.TestCase):
