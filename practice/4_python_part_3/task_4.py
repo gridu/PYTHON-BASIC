@@ -15,12 +15,26 @@ Example:
 """
 
 import argparse
+import faker
 
 
-def print_name_address(args: argparse.Namespace) -> None:
-    ...
+def print_name_address(args: argparse.ArgumentParser) -> None:
+    fake = faker.Faker()
+    args.add_argument('number', type=int, help='number of records to display')
+    args.add_argument('--address')
+    args.add_argument('--name')
+    par_args = args.parse_args()
+    if not par_args.name:
+        par_args.name = 'some_name'
+    if not par_args.address:
+        par_args.address = 'some_address'
+    for _ in range(par_args.number):
+        print({par_args.name: fake.name(), par_args.address: fake.address()})
 
 
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    print_name_address(parser)
 """
 Write test for print_name_address function
 Use Mock for mocking args argument https://docs.python.org/3/library/unittest.mock.html#unittest.mock.Mock
