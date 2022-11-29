@@ -31,4 +31,168 @@ Links:
     - beautiful soup docs: https://www.crummy.com/software/BeautifulSoup/bs4/doc/
     - lxml docs: https://lxml.de/
 """
+import sys
 
+from bs4 import BeautifulSoup
+from urllib.request import urlopen, Request
+import csv
+from typing import List, Tuple, Union, Any
+import pandas
+from pandas import DataFrame
+
+
+def get_urls_about_companies(soup: BeautifulSoup) -> list:
+    results = soup.find(id='scr-res-table')
+    company = results.find_all('a')
+    return ['https://finance.yahoo.com' + element['href'] for element in company]
+
+
+def get_specific_urls_about_companies(soup: BeautifulSoup, specification: str) -> str:
+    results = soup.find(id='quote-nav')
+    profiles = results.find_all('a')
+    return \
+        ['https://finance.yahoo.com' + profile['href'] for profile in profiles if specification in profile['href']][0]
+
+
+def request_page(url: str) -> BeautifulSoup:
+    req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+    page = urlopen(req).read().decode('utf-8')
+    return BeautifulSoup(page, 'html.parser')
+
+
+def get_company_name_and_code(soup: BeautifulSoup) -> tuple:
+    lst = soup.get_text().rstrip(')').split('(')
+    return lst[0], lst[1]
+
+
+def get_data_from_profile(soup: BeautifulSoup) -> tuple:
+    company_name, company_code = get_company_name_and_code(soup.find('h1', 'D(ib) Fz(18px)'))
+    company_location = str(soup.find('p', 'D(ib) W(47.727%) Pend(40px)')).split('<br/>')[2]
+    current = soup.find('p', 'D(ib) Va(t)')
+    lst = current.find_all('span', 'Fw(600)')
+    employees = lst[2].get_text()
+    current = soup.find('tbody')
+    ceo_info = current.select_one(':nth-child(1)')
+    ceo_name = ceo_info.select_one(':nth-child(1)').get_text()
+    ceo_born = ceo_info.select_one(':nth-child(5)').get_text()
+    return company_name, company_code, company_location, employees, ceo_name, ceo_born
+
+
+def get_data_from_statistics(soup: BeautifulSoup) -> tuple:
+    company_name, company_code = get_company_name_and_code(soup.find('h1', 'D(ib) Fz(18px)'))
+    current = soup.find('div', 'Fl(end) W(50%) smartphone_W(100%)').find_all('div', 'Pos(r) Mt(10px)')[0]
+    week_change = current.find('tbody').find_all('td', "Fw(500) Ta(end) Pstart(10px) Miw(60px)")[1].get_text()
+    current = soup.find('div', 'Fl(start) W(50%) smartphone_W(100%)').find_all('div', 'Pos(r) Mt(10px)')[-2]
+    total_cash = current.find('tbody').find_all('td', 'Fw(500) Ta(end) Pstart(10px) Miw(60px)')[0].get_text()
+    return company_name, company_code, week_change, total_cash
+
+
+def get_data_from_holders(soup: BeautifulSoup) -> tuple:
+    def find_blackrock(lst):
+        for element in lst:
+            if 'Blackrock' in str(element):
+                return element
+        return None
+
+    company_name, company_code = get_company_name_and_code(soup.find('h1', 'D(ib) Fz(18px)'))
+    try:
+        current = soup.find('table', 'W(100%) BdB Bdc($seperatorColor)').find('tbody').find_all('tr')
+    except AttributeError:
+        return company_name, company_code, '-', '-', '-', '-'
+    try:
+        shares, date_reported, out, value = find_blackrock(current).find_all('td', 'Ta(end) Pstart(10px)')
+    except AttributeError:
+        return company_name, company_code, '-', '-', '-', '-'
+    return company_name, company_code, shares.get_text(), date_reported.get_text(), out.get_text(), value.get_text()
+
+
+def create_required_datastructures(soup: BeautifulSoup) -> Tuple[List[Tuple], List[Tuple], List[Tuple]]:
+    company_urls = get_urls_about_companies(soup)
+    profile, statistics, holders = [], [], []
+    for company_url in company_urls:
+        comp_soup = request_page(company_url)
+        profile.append(
+            get_data_from_profile(
+                request_page(
+                    get_specific_urls_about_companies(comp_soup, 'profile'))))
+        statistics.append(
+            get_data_from_statistics(
+                request_page(get_specific_urls_about_companies(comp_soup, 'statistics'))))
+        holders.append(
+            get_data_from_holders(
+                request_page(
+                    get_specific_urls_about_companies(comp_soup, 'holders'))))
+
+    def convert_percentage_to_float(item: str) -> float:
+        try:
+            return float(item.strip('%'))
+        except ValueError:
+            return -sys.float_info.max
+
+    def convert_year_to_int(item: str) -> int:
+        try:
+            return int(item)
+        except ValueError:
+            return -1
+
+    def convert_value_to_int(item: str) -> int:
+        try:
+            return int(''.join(item.split(',')))
+        except ValueError:
+            return 0
+
+    return sorted(profile, key=lambda item: convert_year_to_int(item[-1]), reverse=True), \
+           sorted(statistics, key=lambda item: convert_percentage_to_float(item[-2]), reverse=True), \
+           sorted(holders, key=lambda item: convert_value_to_int(item[-1]), reverse=True)
+
+
+def create_csv_profile(profile: list) -> None:
+    with open('profile.csv', mode='w') as profile_file:
+        profile_file = csv.writer(profile_file, delimiter=',')
+        profile_file.writerow(['Name', 'Code', 'Country', 'Employees', 'CEO Name', 'CEO Born'])
+        profile_file.writerows(profile[:5])
+
+
+def create_csv_statistics(statistics: list) -> None:
+    with open('statistics.csv', mode='w') as statistics_file:
+        statistics_file = csv.writer(statistics_file, delimiter=',')
+        statistics_file.writerow(['Name', 'Code', 'Week Change', 'Total Cash'])
+        statistics_file.writerows(statistics[:10])
+
+
+def create_csv_holder(holder: list) -> None:
+    with open('holders.csv', mode='w') as holder_file:
+        holder_file = csv.writer(holder_file, delimiter=',')
+        holder_file.writerow(['Name', 'Code', 'Shares', 'Date reported', '% Out', 'Value'])
+        holder_file.writerows(holder[:10])
+
+
+def create_pandas() -> tuple[Union[DataFrame, Any], Union[DataFrame, Any], Union[DataFrame, Any]]:
+    return pandas.read_csv('holders.csv', index_col='Name'), \
+           pandas.read_csv('profile.csv', index_col='Name'), \
+           pandas.read_csv('statistics.csv', index_col='Name')
+
+
+def create_sheets(profile: pandas.DataFrame, statistics: pandas.DataFrame, holders: pandas.DataFrame) -> None:
+    profile.to_excel('data.xlsx', sheet_name='Profile')
+    statistics.to_excel('data.xlsx', sheet_name='Statistics')
+    holders.to_excel('data.xlsx', sheet_name='Holders')
+
+
+def pprint(profile: pandas.DataFrame, statistics: pandas.DataFrame, holders: pandas.DataFrame) -> None:
+    print(profile, '\n', statistics, '\n', holders)
+
+
+def main(url):
+    soup = request_page(url)
+    profile, statistics, holders = create_required_datastructures(soup)
+    create_csv_profile(profile)
+    create_csv_statistics(statistics)
+    create_csv_holder(holders)
+    profile, statistics, holders = create_pandas()
+    create_sheets(profile, statistics, holders)
+    pprint(profile, statistics, holders)
+
+
+if __name__ == '__main__':
+    main('https://finance.yahoo.com/most-active')
