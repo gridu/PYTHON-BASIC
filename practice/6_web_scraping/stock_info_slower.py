@@ -30,9 +30,12 @@ Links:
     - requests docs: https://docs.python-requests.org/en/latest/
     - beautiful soup docs: https://www.crummy.com/software/BeautifulSoup/bs4/doc/
     - lxml docs: https://lxml.de/
+
+Implementation without Thread module, approximate time of execution: 129 seconds.
+
 """
 import sys
-
+import time
 from bs4 import BeautifulSoup
 from urllib.request import urlopen, Request
 import csv
@@ -184,14 +187,16 @@ def pprint(profile: pandas.DataFrame, statistics: pandas.DataFrame, holders: pan
 
 
 def main(url):
+    start = time.time()
     soup = request_page(url)
     profile, statistics, holders = create_required_datastructures(soup)
     create_csv_profile(profile)
     create_csv_statistics(statistics)
     create_csv_holder(holders)
-    profile, statistics, holders = create_pandas()
+    holders, profile, statistics = create_pandas()
     create_sheets(profile, statistics, holders)
     pprint(profile, statistics, holders)
+    print(time.time() - start)
 
 
 if __name__ == '__main__':
