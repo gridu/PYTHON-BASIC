@@ -14,6 +14,19 @@ Examples:
 """
 from typing import Iterable
 
-
+def unique_filter(ls):
+    filter = []
+    seen = set()
+    for elem in ls:
+        if not elem in seen:
+            filter.append(elem)
+            seen.add(elem)
+    return filter
 def build_from_unique_words(*lines: Iterable[str], word_number: int) -> str:
-    ...
+    words = list()
+    for line in lines:
+        filtered = unique_filter(line.split())
+        if word_number < len(filtered):
+            words.append(filtered[word_number])
+    out = " ".join(words)
+    return out
