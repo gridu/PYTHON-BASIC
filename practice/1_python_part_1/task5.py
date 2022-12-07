@@ -13,4 +13,11 @@ Examples:
 
 
 def remove_duplicated_words(line: str) -> str:
-    ...
+    result=""
+    list=line.split(' ')
+    unique_words=dict.fromkeys(list)
+
+    for x in unique_words:
+        result+= (x+' ')
+
+    return result.strip()

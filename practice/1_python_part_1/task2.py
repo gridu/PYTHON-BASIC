@@ -13,4 +13,15 @@ from typing import Dict
 
 
 def set_to_dict(dict_to_update: Dict[str, int], **items_to_set) -> Dict:
-    ...
+    keys=dict_to_update.keys()
+
+    for x in items_to_set:
+        
+        if(x in keys):
+            if(dict_to_update[x]<items_to_set[x]):
+                dict_to_update[x]=items_to_set[x]
+  
+        else:
+            dict_to_update[x]=items_to_set[x]
+    
+    return dict_to_update
