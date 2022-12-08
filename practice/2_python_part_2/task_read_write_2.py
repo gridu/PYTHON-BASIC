@@ -22,3 +22,17 @@ def generate_words(n=20):
         words.append(word)
 
     return words
+
+
+if __name__ == '__main__':
+    with open('file1.txt', 'w', encoding='utf-8') as f1:
+        for word in generate_words():
+            f1.write(word+'\n')
+        f1.close()
+
+    with open('file2.txt', 'w', encoding='cp1252') as f2:
+        for word in generate_words():
+            f2.write(word+',')
+        f2.close()
+
+
