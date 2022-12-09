@@ -29,15 +29,35 @@ import datetime
 
 
 class Teacher:
-    ...
+    def __init__(self, last_name, first_name):
+        self.last_name = last_name
+        self.first_name = first_name
+
+    def create_homework(self, task, days_to_complete):
+        return Homework(task, days_to_complete)
 
 
 class Student:
-    ...
+    def __init__(self, last_name, first_name):
+        self.last_name = last_name
+        self.first_name = first_name
+
+    def do_homework(self, homework):
+        if (homework.is_active()):
+            return homework
+        else:
+            print('You are late')
+            return None
 
 
 class Homework:
-    ...
+    def __init__(self, text, days_to_complete):
+        self.text = text
+        self.created = datetime.datetime.now()
+        self.deadline = self.created + datetime.timedelta(days=days_to_complete)
+
+    def is_active(self):
+        return self.deadline < datetime.datetime.now()
 
 
 if __name__ == '__main__':
@@ -52,8 +72,7 @@ if __name__ == '__main__':
     expired_homework.text  # 'Learn functions'
 
     # create function from method and use it
-    create_homework_too = teacher.create_homework
-    oop_homework = create_homework_too('create 2 simple classes', 5)
+    oop_homework = teacher.create_homework('create 2 simple classes', 5)
     oop_homework.deadline  # 5 days, 0:00:00
 
     student.do_homework(oop_homework)
