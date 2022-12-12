@@ -16,9 +16,12 @@ def set_to_dict(dict_to_update: Dict[str, int], **items_to_set) -> Dict:
     for i in dict_to_update:
         pass
       #  print (dict_to_update[i])
-    if 
-    for i in items_to_set:
-        if (dict_to_update.get(i))<(items_to_set[i]):
-            dict_to_update[i]=items_to_set[i]
-    print(dict_to_update)
-set_to_dict({'a': 5})
+    if len(dict_to_update) == 0: 
+        return(items_to_set)
+    else:
+        for i in items_to_set:
+            if (dict_to_update.get(i))<(items_to_set[i]):
+                dict_to_update[i]=items_to_set[i]
+        return(dict_to_update)
+        
+set_to_dict({'a': 1, 'b': 2, 'c': 3}, a=0, b=4)
