@@ -15,10 +15,8 @@ from typing import List, Any
 
 
 def delete_from_list(list_to_clean: List, item_to_delete: Any) -> List:
-    ...
-while item_to_delete in list_to_clean:
+def delete_from_list(list_to_clean: List, item_to_delete: Any) -> List:
+    while item_to_delete in list_to_clean:
         index = list_to_clean.index(item_to_delete)
         list_to_clean.pop(index)
-        print(list_to_clean)
-    else:
-        print(list_to_clean)
+    print(list_to_clean)
