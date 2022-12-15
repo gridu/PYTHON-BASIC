@@ -25,6 +25,7 @@ def test_division_by_zero(capfd):
     out, err = capfd.readouterr()
     assert out == 'Division by zero'
 
+
 def test_division_by_one(capfd):
     with pytest.raises(DivisionByOneException) as e:
         division(5, 1)
