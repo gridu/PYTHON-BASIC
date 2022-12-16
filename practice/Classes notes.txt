@@ -1,0 +1,6 @@
+Class Dog:
+    def __init__(self, name) #  this init is called every time I call the object. For example somewhere 
+    self.name = name #class's attribute name assigned to the variable name. it stored for the different objects internally
+
+
+d = Dog("tim") # this is a variable which will be assigned to the attribute of the class
