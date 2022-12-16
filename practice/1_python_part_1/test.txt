@@ -1,0 +1,2 @@
+Class Dog:
+def __init__(self, name) -  this init is called every time I call the object. For example somewhere 
