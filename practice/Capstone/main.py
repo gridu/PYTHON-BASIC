@@ -37,14 +37,14 @@ class Args(NamedTuple):
         return
 
 
-def return_timestamp_fun(value: str) -> Callable:
+def return_timestamp_func(value: str) -> Callable:
     if value == '':
         return time.time
     logger.warning('Timestamp does not support any values.')
     return time.time
 
 
-def return_int_fun(value: str) -> Any:
+def return_int_func(value: str) -> Any:
     if value == 'rand':
         return lambda: random.randint(0, 100000)
     elif value.startswith('[') and value.endswith(']'):
@@ -67,7 +67,7 @@ def return_int_fun(value: str) -> Any:
         return lambda: value
 
 
-def return_str_fun(value: str) -> Any:
+def return_str_func(value: str) -> Any:
     if value == 'rand':
         return lambda: str(uuid4())
     elif value.startswith('[') and value.endswith(']'):
@@ -86,7 +86,7 @@ def return_str_fun(value: str) -> Any:
 
 logging.basicConfig(level='INFO', format='[%(levelname)s] %(process)d %(filename)s -- %(message)s')
 logger = logging.getLogger('Console app')
-GENERATORS = {'timestamp': return_timestamp_fun, 'int': return_int_fun, 'str': return_str_fun}
+GENERATORS = {'timestamp': return_timestamp_func, 'int': return_int_func, 'str': return_str_func}
 
 
 def parse_args(config, default_name='default values') -> Args:
@@ -194,8 +194,9 @@ def get_data_schema(args: Args) -> dict:
 
 
 def clear_path(path_to_save_files: str, file_name: str) -> None:
-    [os.remove(path_to_save_files + '/' + file) for file in os.listdir(path_to_save_files) if
-     file.startswith(file_name)]
+    for file in os.listdir(path_to_save_files):
+        if file.startswith(file_name):
+            os.remove(os.path.join(path_to_save_files, file))
 
 
 def output_manager(args: Args) -> None:
@@ -204,7 +205,8 @@ def output_manager(args: Args) -> None:
         logger.info('Creating data...')
         data = data_creator(data_schema, args.data_lines)
         logger.info('Printing output...')
-        [print(json.dumps(data[i])) for i in range(len(data))]
+        for i in range(len(data)):
+            print(json.dumps(data[i]))
     else:
         if not check_path(args.path_to_save_files):
             logger.error('Path need to be in directory.')
@@ -221,14 +223,14 @@ def output_manager(args: Args) -> None:
                                 [() for _ in range(args.files_count)])
         if args.file_prefix:
             prefixes = create_prefixes(args.files_count, args.file_prefix)
-            paths = [args.path_to_save_files + '/' + args.file_name + '_' + prefix
+            paths = [os.path.join(args.path_to_save_files, args.file_name) + '_' + prefix
                      for prefix in prefixes]
             logger.info('Creating files with data...')
             with ThreadPoolExecutor(max_workers=min(os.cpu_count() + 4, 32)) as executor:
                 executor.map(dump_data_to_json, paths, data)
         else:
             logger.info('Creating file with data...')
-            path = args.path_to_save_files + '/' + args.file_name
+            path = os.path.join(args.path_to_save_files, args.file_name)
             dump_data_to_json(path, data[0])
     logger.info('Everything was successful, exiting...')
 

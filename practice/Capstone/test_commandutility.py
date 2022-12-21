@@ -5,11 +5,12 @@ from unittest.mock import Mock
 import shutil
 import re
 
+
 config = configparser.ConfigParser()
 config.read('test.ini')
 correct_schemas = [config[section_name]['data_schema'] for section_name in config.sections()
                    if 'correct' in section_name]
-correct_paths = ['.', './', '/Users/imacedonski/PycharmProjects/PYTHON-BASIC/practice/Capstone/output1', './output']
+correct_paths = ['.', './', os.path.join(os.getcwd(), 'output'), './output']
 incorrect_paths = ['/Users', '/']
 possible_str_values = ['rand', "['some1', 'some2', 'some3']", 'cat', '']
 possible_int_values = ['rand', 'rand(35, 40)', '']
@@ -36,7 +37,7 @@ def create_args():
 
 
 def test_return_str_fun():
-    data = [return_str_fun(value)() for value in possible_str_values]
+    data = [return_str_func(value)() for value in possible_str_values]
     regex = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$", re.I)
     assert bool(regex.match(data[0])) is True
     assert data[1] in ['some1', 'some2', 'some3']
@@ -45,7 +46,7 @@ def test_return_str_fun():
 
 
 def test_return_int_fun():
-    data = [return_int_fun(value)() for value in possible_int_values]
+    data = [return_int_func(value)() for value in possible_int_values]
     assert data[0] in range(100000)
     assert data[1] in range(35, 41)
     assert data[2] is None
