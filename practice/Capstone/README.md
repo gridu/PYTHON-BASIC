@@ -25,8 +25,14 @@ Arguments available in app:
                          to create an equal number of files in parallel.
 
 All arguments can be set up from console. Some of them are provided with default values (as mentioned in help). 
-Data schema should support special notation: 'type:what_to_generate', where type is one of \['str', 'int, 'timestamp'\]
+Data schema should support special notation: 'type:what_to_generate', where type is one of \['str', 'int, 'timestamp'\].
+
 If type == 'str' then possible what_to_generate values are: 'rand', \['str1', 'str2', ... \], 'some_str', ''.
+
 If type == 'int' then possible what_to_generate_values are: 'rand', 'rand(a, b)', '', where of course a and b are some integers.
+
 If type == 'timestamp' then what_to_generate value should be empty (if provided then it will be ignored). 
 
+Example of correct data schema:
+
+{“date”:”timestamp:”, “name”: “str:rand”, “type”:”\[‘client’, ‘partner’, ‘government’\]”, “age”: “int:rand(1, 90)”}
