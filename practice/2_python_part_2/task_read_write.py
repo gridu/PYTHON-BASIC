@@ -13,3 +13,20 @@ Example:
 
     result.txt(content: "23, 78, 3")
 """
+
+
+def unpack_data():
+    data_from_files = []
+    for i in range(1, 21):
+        with open(f'./files/file_{i}.txt', 'r') as f:
+            data_from_files.append(f.readline().rstrip('\n'))
+    return data_from_files
+
+
+def load_data(data_from_files):
+    with open('./files/result.txt', 'w') as g:
+        for number, word in enumerate(data_from_files):
+            if number != 19:
+                g.write(word + ', ')
+            else:
+                g.write(word)
