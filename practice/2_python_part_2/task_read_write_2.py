@@ -22,3 +22,6 @@ def generate_words(n=20):
         words.append(word)
 
     return words
+
+
+print(generate_words())
