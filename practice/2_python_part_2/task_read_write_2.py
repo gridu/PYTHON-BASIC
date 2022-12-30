@@ -18,10 +18,26 @@ def generate_words(n=20):
 
     words = list()
     for _ in range(n):
-        word = ''.join(random.choices(string.ascii_lowercase, k=random.randint(3, 10)))
+        word = ''.join(random.choices(
+            string.ascii_lowercase, k=random.randint(3, 10)))
         words.append(word)
 
     return words
 
 
-print(generate_words())
+fileList = generate_words()
+file1 = "\n".join(i for i in fileList)
+file2 = ",".join(i for i in fileList[::-1])
+
+
+f = open("files/file1.txt", "a")
+f.seek(0)
+f.truncate()
+f.write(file1)
+f.close()
+
+f = open("files/file2.txt", "a")
+f.seek(0)
+f.truncate()
+f.write(file2)
+f.close()
