@@ -30,13 +30,13 @@ file1 = "\n".join(i for i in fileList)
 file2 = ",".join(i for i in fileList[::-1])
 
 
-f = open("files/file1.txt", "a")
+f = open("files/file1.txt", "w", encoding='utf-8')
 f.seek(0)
 f.truncate()
 f.write(file1)
 f.close()
 
-f = open("files/file2.txt", "a")
+f = open("files/file2.txt", "w",  encoding='CP1252')
 f.seek(0)
 f.truncate()
 f.write(file2)
