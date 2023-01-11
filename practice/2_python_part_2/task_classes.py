@@ -28,7 +28,6 @@ PEP8 comply strictly.
 """
 import datetime
 
-
 class Teacher:
     def __init__(self, last_name, first_name):
         self.last_name = last_name
@@ -52,8 +51,11 @@ class Student:
         self.first_name = first_name
 
     def do_homework(self, homework):
-        if homework.days_complete == 0:
+        if homework.days_complete <= 0:
             print('You are late')
+            return False
+        else:
+            return True
 
 
 class Homework:
@@ -65,11 +67,13 @@ class Homework:
                          + datetime.timedelta(days=self.days_complete))
                          - self.created)
 
-        print("I am a HW object")
 
     def is_active(self):
-        print(self.days_complete)
-        print("HW is already closed")
+        if (self.days_complete>0):
+            return True
+        else:
+            print("HW is already closed")
+            return False
 
 
 if __name__ == '__main__':

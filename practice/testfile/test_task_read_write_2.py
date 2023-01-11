@@ -1,4 +1,7 @@
 from task_read_write_21 import RandomWordsGenerator
+import Classesnotes
+
+
 
 newObject = RandomWordsGenerator("I am somename")
 #print (newObject.somename)

@@ -9,6 +9,8 @@ Task:
  1. Write a test with @pytest.mark.parametrize decorator.
  2. Find the buggy function and fix it.
 """
+import pytest
+
 
 
 def fibonacci_1(n):
@@ -23,3 +25,10 @@ def fibonacci_2(n):
     for i in range(1, n+1):
         fibo.append(fibo[i-1] + fibo[i-2])
     return fibo[n]
+
+#@pytest.mark.parametrize
+def test_fibonacci_1_pass():
+    assert fibonacci_1(2) == 1
+
+def test_fibonacci_2_pass():
+    assert fibonacci_2(2) == 1
