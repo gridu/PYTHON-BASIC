@@ -18,6 +18,14 @@ Examples:
 
 
 def read_numbers(n: int) -> str:
-    ...
-
-
+    inputs = []
+    for _ in range(n):
+        user_input = input("Enter a value: ")
+        try:
+            user_input = int(user_input)
+            inputs.append(user_input)
+        except ValueError:
+            pass
+    if not inputs:
+        return "No numbers entered"
+    return "Avg: {0:.2f}".format(sum(inputs) / len(inputs))
