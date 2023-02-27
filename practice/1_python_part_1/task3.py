@@ -14,6 +14,14 @@ Examples:
 """
 from typing import Iterable
 
-
 def build_from_unique_words(*lines: Iterable[str], word_number: int) -> str:
-    ...
+    '''
+    Returns the word formed from the index of the word_number in each line.
+    '''
+    final_str = ''
+    for line in lines:
+        line = line.split()
+        if word_number > len(line)-1:
+            continue
+        final_str += f"{line[word_number]} "
+    return final_str
