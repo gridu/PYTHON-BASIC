@@ -17,8 +17,11 @@ with open(filename) as opened_file:
         ...
 """
 from typing import Tuple
-
+import heapq
 
 def get_min_max(filename: str) -> Tuple[int, int]:
-    ...
-
+    with open(filename, "r") as f:
+        nums_lst=f.read().splitlines()
+        heapq.heapify(nums_lst)
+        sorted_nums_lst = [int(heapq.heappop(nums_lst)) for _ in range(len(nums_lst))]
+    return (sorted_nums_lst[0], sorted_nums_lst[-1])
