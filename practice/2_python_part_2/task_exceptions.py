@@ -16,6 +16,15 @@ In all cases it should print "Division finished"
 """
 import typing
 
-
 def division(x: int, y: int) -> typing.Union[None, int]:
-    ...
+    stmt = "Division finished"
+    if y == 0:
+        print("Division by 0")
+        print(stmt)
+        return None
+    elif y == 1:
+        print(stmt)
+        raise Exception("Division by 1 returns the same result")
+    else:
+        print(stmt)
+        return int(x/y)
