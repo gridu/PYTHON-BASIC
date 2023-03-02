@@ -11,7 +11,6 @@ Example:
         file2.txt (content: "xyz,def,abc", encoding: CP1252)
 """
 
-
 def generate_words(n=20):
     import string
     import random
@@ -22,3 +21,12 @@ def generate_words(n=20):
         words.append(word)
 
     return words
+
+rand_words = generate_words(10)
+
+with open("new_file", "w", encoding="utf-8") as f:
+    f.writelines(word + '\n' for word in rand_words)
+
+with open("second_file", "w", encoding="CP1252") as f2:
+    f2.writelines(word + '\n' for word in rand_words[::-1])
+
