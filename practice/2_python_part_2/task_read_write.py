@@ -17,20 +17,25 @@ Example:
 import os
 
 def read_files(*files):
-    path = r"\files"
+    path = r"/files"
 
-    print(files)
     # Need to cd into folder above files
     path_to_folder = os.getcwd() + path
-    # files_list = [file for sub_dir, dirs, files in os.walk(path_to_folder) for file in files]
+
+    # Get list of files to go through
     files_list = [file for file in files]
-    print(files_list)
+
     res_lst = []
 
+    # Add contents of each file to results list
     for file in files_list:
-        with open(f"{path_to_folder}\{file}", "r") as f:
+        with open(f"{path_to_folder}/{file}", "r") as f:
             file_content=f.read()
             res_lst.append(file_content)
 
-    with open(fr"{path_to_folder}\result.txt", "w") as r:
-        r.write(",".join(res_lst))
+    # Output the contents of each file to the result text file separated by a comma and space
+    with open(fr"{path_to_folder}/result.txt", "w") as r:
+        r.write(", ".join(res_lst))
+
+if __name__ == '__main__':
+    read_files("file_1.txt", "file_2.txt", "file_3.txt")

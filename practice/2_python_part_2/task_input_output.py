@@ -27,3 +27,6 @@ def read_numbers(n: int) -> str:
             return_stmt = f"Avg: {avg}"
     return return_stmt
 
+
+if __name__ == '__main__':
+    print(read_numbers(5))
