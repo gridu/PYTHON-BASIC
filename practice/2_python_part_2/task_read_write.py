@@ -29,12 +29,12 @@ def read_files(*files):
 
     # Add contents of each file to results list
     for file in files_list:
-        with open(f"{path_to_folder}/{file}", "r") as f:
-            file_content=f.read()
-            res_lst.append(file_content)
+        with open(f"{path_to_folder}/{file}", "r", encoding="utf-8") as f:
+            file_content=f.read().splitlines() # Reading all lines of file in case content is on multiple lines
+            res_lst.extend(file_content)
 
     # Output the contents of each file to the result text file separated by a comma and space
-    with open(fr"{path_to_folder}/result.txt", "w") as r:
+    with open(fr"{path_to_folder}/result.txt", "w", encoding="utf-8") as r:
         r.write(", ".join(res_lst))
 
 if __name__ == '__main__':
