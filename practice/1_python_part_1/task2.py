@@ -13,4 +13,17 @@ from typing import Dict
 
 
 def set_to_dict(dict_to_update: Dict[str, int], **items_to_set) -> Dict:
-    ...
+    if dict_to_update == {}:
+        return items_to_set
+    elif items_to_set == {}:
+        return dict_to_update
+    else:
+        for x in dict_to_update.keys():
+            for y in items_to_set.keys():
+                if x == y:
+                    currentvalue = dict_to_update.get(x)
+                    newvalue = items_to_set.get(y)
+                    dict_to_update[x] = newvalue if currentvalue < newvalue else currentvalue
+        return dict_to_update
+
+
