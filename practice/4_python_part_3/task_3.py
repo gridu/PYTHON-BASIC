@@ -13,8 +13,13 @@ import re
 
 
 def is_http_domain(domain: str) -> bool:
-    ...
+    pattern = r"^((http|https):\/\/)(([\w]-?)+\w\.\w+)(([\w]-?)+\w\.\w+)?\/?$"
+    return bool(re.match(pattern, domain))
 
+if __name__ == "__main__":
+    print(is_http_domain('http://wikipedia.org'))
+    print(is_http_domain('https://ru.wikipedia.org/'))
+    print(is_http_domain('griddynamics.com'))
 
 """
 write tests for is_http_domain function
