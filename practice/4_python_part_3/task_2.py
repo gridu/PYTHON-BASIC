@@ -11,11 +11,22 @@ Examples:
 """
 import math
 
+class OperationNotFoundException(Exception):
+    pass
 
 def math_calculate(function: str, *args):
-    ...
+    try:
+        math_func = getattr(math, function)
+        return math_func(*args)
+    except AttributeError:
+        raise OperationNotFoundException('Invalid function for math module.')
 
+
+if __name__ == "__main__":
+    print(math_calculate('log', 1024, 2))
+    print(math_calculate('ceil', 10.7))
 
 """
 Write tests for math_calculate function
 """
+
