@@ -6,20 +6,29 @@ https://docs.pytest.org/en/6.2.x/tmpdir.html
 """
 
 
-
 # To allow importing modules from other directories
 import sys
 import unittest
 import tempfile
 import os
 
-# Allowing file to search for modules in parent directory. Need to cd into 3_python_testing folder
-sys.path.append("..")
-
 from python_part_2 import task_read_write_2 as task
 
+# Testing that the contents of the reversed file are in reverse order to the contents of the original file.
 class Read_Write_Tests_2(unittest.TestCase):
-    def test_read_write_2_output(self):
-        temp_path = tempfile.mkstemp()[1]
-        task.read_files("file_1.txt", "file_2.txt", res_file_path=temp_path)
+    def test_read_write_2_reverse(self):
+        temp_rand_file = tempfile.mkstemp()[1]
+        temp_reverse_file = tempfile.mkstemp()[1]
+        task.task_read_write_2(temp_rand_file, temp_reverse_file)
+        with open(temp_rand_file, "r", encoding="utf-8") as temp_file:
+            contents = temp_file.readlines()
+        
+        with open(temp_reverse_file, "r", encoding="utf-8") as reversed_temp_file:
+            reversed_contents = reversed_temp_file.readlines()
+        self.assertEqual(reversed_contents, list(reversed(contents)))
 
+        os.remove(temp_rand_file)
+        os.remove(temp_reverse_file)
+
+if __name__ == "__main__":
+    unittest.main()

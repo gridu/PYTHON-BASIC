@@ -6,10 +6,13 @@ Examples:
      200, 'response data'
 """
 from typing import Tuple
-
+import urllib.request
 
 def make_request(url: str) -> Tuple[int, str]:
-    ...
+    print(urllib.request.urlopen(url).getcode())
+
+if __name__ == "__main__":
+    print(make_request('https://www.google.com'))
 
 
 """
