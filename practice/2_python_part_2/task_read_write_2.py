@@ -22,15 +22,15 @@ def generate_words(n=20):
 
     return words
 
-def task_read_write_2():
+def task_read_write_2(rand_file, reverse_file):
     rand_words = generate_words(10)
 
-    with open("new_file", "w", encoding="utf-8") as f:
+    with open(rand_file, "w", encoding="utf-8") as f:
         f.writelines(word + '\n' for word in rand_words)
 
-    with open("second_file", "w", encoding="CP1252") as f2:
+    with open(reverse_file, "w", encoding="CP1252") as f2:
         f2.writelines(word + '\n' for word in rand_words[::-1])
 
 if __name__ == '__main__':
-    task_read_write_2()
+    task_read_write_2("random_words.txt", "reverse_words.txt")
 
