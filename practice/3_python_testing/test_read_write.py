@@ -27,6 +27,6 @@ def test_read_write_output():
 
 def test_invalid_filename():    
     temp_path = tempfile.mkstemp()[1]
-    with pytest.raises(FileNotFoundError):
+    with pytest.raises(FileNotFoundError, match=r"File doesn't exist. Please recheck file names."):
         task.read_files("file_1.txt", "files_2.txt", res_file_path=temp_path)
     os.remove(temp_path)
