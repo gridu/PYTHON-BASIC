@@ -10,8 +10,12 @@ Examples:
      11
 """
 import math
+import pytest 
 
 class OperationNotFoundException(Exception):
+    pass
+
+class InvalidNumberOfArguments(Exception):
     pass
 
 def math_calculate(function: str, *args):
@@ -20,13 +24,24 @@ def math_calculate(function: str, *args):
         return math_func(*args)
     except AttributeError:
         raise OperationNotFoundException('Invalid function for math module.')
-
-
-if __name__ == "__main__":
-    print(math_calculate('log', 1024, 2))
-    print(math_calculate('ceil', 10.7))
+    except TypeError:
+        raise InvalidNumberOfArguments('Recheck the number of arguments.')
 
 """
 Write tests for math_calculate function
 """
+
+class TestMathCalculate:
+    def test_valid_func_and_num_params(self):
+        assert math_calculate('ceil', 10.7) == 11
+
+    def test_valid_func_invalid_params(self):
+        with pytest.raises(InvalidNumberOfArguments):
+            math_calculate('ceil', 10.7, 4)
+    
+    def test_invalid_func(self):
+        with pytest.raises(OperationNotFoundException):
+            math_calculate('ceils', 10.7)
+
+    
 

@@ -26,12 +26,6 @@ def calculate_days(from_date: str) -> int:
         raise WrongFormatException(f"{from_date} format is invalid. Format should match '{date_format}'")
     return abs((current_date - from_date).days)
 
-if __name__ == "__main__":
-    print(calculate_days('2023-03-18'))
-    print(calculate_days('2023-03-02'))
-    # calculate_days('10-07-2021')
-
-
 """
 Write tests for calculate_days function
 Note that all tests should pass regardless of the day test was run
