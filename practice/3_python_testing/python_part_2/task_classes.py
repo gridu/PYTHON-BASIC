@@ -29,8 +29,8 @@ import datetime as dt
 
 class Teacher:
     def __init__(self, lname, fname) -> None:
-        self.last_name = lname
-        self.first_name = fname
+            self.last_name = lname
+            self.first_name = fname
 
     def create_homework(self, homework_text, num_completion_days):
         return Homework(homework_text, num_completion_days)
