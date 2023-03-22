@@ -6,12 +6,16 @@ Examples:
      200, 'response data'
 """
 from typing import Tuple
-
+from urllib.request import urlopen
+from unittest.mock import Mock
 
 def make_request(url: str) -> Tuple[int, str]:
-    ...
+    with urlopen(url) as response:
+        status = response.status
+        body = response.read().decode("utf-8")
+        return f"{status}, '{body}'"
 
-
+# print(make_request('https://www.google.com'))
 """
 Write test for make_request function
 Use Mock for mocking request with urlopen https://docs.python.org/3/library/unittest.mock.html#unittest.mock.Mock
@@ -24,3 +28,8 @@ Example:
     >>> m.method2()
     b'some text'
 """
+mock = Mock()
+urllib_attrs = {'status.return_value': 200, 'read_body.return_value':b'some response text'}
+mock.configure_mock(**urllib_attrs)
+
+print(mock.read_body())
