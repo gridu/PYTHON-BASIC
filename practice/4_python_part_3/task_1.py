@@ -11,6 +11,8 @@ If entered date is from future, return negative value for number of days
     WrongFormatException
 """
 from datetime import datetime
+from freezegun import freeze_time
+import pytest 
 
 class WrongFormatException(Exception):
     pass
@@ -22,7 +24,7 @@ def calculate_days(from_date: str) -> int:
         from_date = datetime.strptime(from_date, date_format)
     except ValueError:
         raise WrongFormatException(f"{from_date} format is invalid. Format should match '{date_format}'")
-    return (current_date - from_date).days
+    return abs((current_date - from_date).days)
 
 if __name__ == "__main__":
     print(calculate_days('2023-03-18'))
@@ -35,3 +37,15 @@ Write tests for calculate_days function
 Note that all tests should pass regardless of the day test was run
 Tip: for mocking datetime.now() use https://pypi.org/project/pytest-freezegun/
 """
+
+@freeze_time("2023-03-20")
+class TestCalculateDays:
+    def test_past_date_correct_format(self):
+        assert calculate_days('2023-03-13') == 7
+    
+    def test_future_date_correct_format(self):
+        assert calculate_days('2023-03-30') == 10
+    
+    def test_date_incorrect_format(self):
+        with pytest.raises(WrongFormatException):
+            calculate_days('09-20-2022')
