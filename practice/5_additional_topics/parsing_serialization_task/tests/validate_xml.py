@@ -69,4 +69,5 @@ def check_result(xml_path: str):
 
 
 if __name__ == '__main__':
-    check_result(xml_path='./example_result.xml')
+    check_result(xml_path="/Users/tiasalmon/Documents/Python_Basics/python_basic/practice/5_additional_topics/parsing_serialization_task/spain-cities.xml")
+    # check_result(xml_path='./example_result.xml')
