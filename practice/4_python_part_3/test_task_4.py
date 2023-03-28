@@ -9,18 +9,23 @@ Example:
 """
 
 import pytest
-from unittest.mock import Mock
 import os
+import subprocess
 
-fake = Mock()
-faker_attrs = {'name.return_value': 'Amanda Tracy', 'address.return_value':'944 Priscilla Junctions Suite 591\nEast Davidberg, NV 13114', 'color.return_value': '#e57293'}
-fake.configure_mock(**faker_attrs)
+from task_4_exceptions import InvalidFakerProviderException, InvalidKeyValuePairException
 
-print(os.system("python3 'task_4.py' 5 --name=name --address=address"))
-
+print(subprocess.run(["python3", "task_4.py", "2", "--name=s", "--address=address=addr"]))
 class TestPrintName:
-    pass
-    def test_with_valid_args(self):
-        pass
-        # test = os.system('task_4 5 --name=name --address=address')
-        # print(test)
+    def test_with_valid_args(self, capfd):
+        os.system("python3 'task_4.py' 2 --name=name --address=address")
+        captured = capfd.readouterr()
+        out_dict = {'name': 'Amanda Tracy', 'address': '944 Priscilla Junctions Suite 591\nEast Davidberg, NV 13114'}
+        assert captured.out == f"{out_dict}\n"*2
+    
+    def test_with_invalid_dict_pair(self):
+        with pytest.raises(InvalidKeyValuePairException):
+            subprocess.run(["python3", "task_4.py", "2", "--name=s", "--address=address=addr"])
+        # assert os.system("python3 'task_4.py' 2 --name=s --address=address=addr") == "n"
+
+        # with pytest.raises(InvalidKeyValuePairException):
+

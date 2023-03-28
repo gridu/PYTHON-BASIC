@@ -16,20 +16,20 @@ Example:
 
 import argparse
 from faker import Faker
-
+from unittest.mock import Mock
+from task_4_exceptions import InvalidFakerProviderException, InvalidKeyValuePairException
 
 fake = Faker()
+
+fake = Mock()
+faker_attrs = {'name.return_value': 'Amanda Tracy', 'address.return_value':'944 Priscilla Junctions Suite 591\nEast Davidberg, NV 13114', 'color.return_value': '#e57293'}
+fake.configure_mock(**faker_attrs)
 
 parser = argparse.ArgumentParser(prog="TaskFourCLI")
 parser.add_argument('NUMBER', type=int)
 parser.add_argument('add_args', nargs=argparse.REMAINDER)
 args = parser.parse_args()
 
-class InvalidKeyValuePair(Exception):
-    pass
-
-class InvalidFakerProvider(Exception):
-    pass
 
 def print_name_address(args: argparse.Namespace) -> None:
     for _ in range(args.NUMBER):
@@ -39,7 +39,7 @@ def print_name_address(args: argparse.Namespace) -> None:
 
             # Check if after split of add_args it's equal to 2
             if len(arg_lst) != 2:
-                raise InvalidKeyValuePair("A dictionary requires a key-value pair.")
+                raise InvalidKeyValuePairException("A dictionary requires a key-value pair.")
         
             dict_key = arg_lst[0].strip('--')
             arg_val = arg_lst[1]
@@ -48,8 +48,9 @@ def print_name_address(args: argparse.Namespace) -> None:
                 f = getattr(fake, arg_val)
             except AttributeError:
                 print(arg_val)
-                raise InvalidFakerProvider('Faker Provider not found. Please enter a valid value.')
+                raise InvalidFakerProviderException('Faker Provider not found. Please enter a valid value.')
             
             new_dict[dict_key] = f()
         print(f"{new_dict}")
+
 print_name_address(args)
