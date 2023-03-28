@@ -1,6 +1,7 @@
 import os
 from random import randint
 import sys
+from concurrent.futures import ThreadPoolExecutor
 
 OUTPUT_DIR = './output'
 RESULT_FILE = './output/result.csv'
@@ -18,6 +19,8 @@ def fib(n: int):
 
 
 def func1(array: list):
+    with concurrent.futures.ThreadPoolExecutor(max_workers=len(array)) as executor:
+
     for el in array:
         with open(f"file {el}", "w", encoding="utf-8") as el_file:
             el_file.write(str(fib(el)))
