@@ -7,7 +7,13 @@ Examples:
 """
 from typing import Tuple
 from urllib.request import urlopen
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
+
+urlopen = Mock(urlopen('https://www.google.com'))
+url_open_attrs = {'read.return_value':b'some response text'}
+urlopen.configure_mock(**url_open_attrs)
+
+# urlopen('https://www.google.com').__enter__().read.return_value = b'some response text'
 
 def make_request(url: str) -> Tuple[int, str]:
     with urlopen(url) as response:
@@ -28,8 +34,11 @@ Example:
     >>> m.method2()
     b'some text'
 """
-mock = Mock()
-urllib_attrs = {'status.return_value': 200, 'read_body.return_value':b'some response text'}
-mock.configure_mock(**urllib_attrs)
 
-print(mock.read_body())
+
+class TestMakeRequest:
+
+
+    def test_with_valid_url(self):
+        assert make_request('https://www.google.com') == "200, some response text"
+# print(urlopen.read().decode())
