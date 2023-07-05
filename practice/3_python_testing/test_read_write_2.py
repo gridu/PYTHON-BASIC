@@ -4,3 +4,7 @@ To write files during tests use temporary files:
 https://docs.python.org/3/library/tempfile.html
 https://docs.pytest.org/en/6.2.x/tmpdir.html
 """
+import pytest
+
+def test_generate_words():
+    pass

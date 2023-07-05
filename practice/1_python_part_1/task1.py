@@ -15,4 +15,8 @@ from typing import List, Any
 
 
 def delete_from_list(list_to_clean: List, item_to_delete: Any) -> List:
-    ...
+    res = [i for i in list_to_clean if i != item_to_delete]
+    return (res)
+
+
+print(delete_from_list([], 'b'))
