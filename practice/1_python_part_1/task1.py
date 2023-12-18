@@ -13,6 +13,10 @@ Examples:
 """
 from typing import List, Any
 
-
 def delete_from_list(list_to_clean: List, item_to_delete: Any) -> List:
-    ...
+    try:
+        index = list_to_clean.index(item_to_delete)
+        list_to_clean.pop(index)
+    except ValueError:
+        pass  # The element to delete is not in the list
+    return list_to_clean
