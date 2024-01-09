@@ -16,8 +16,27 @@ Examples:
 
 """
 
-
 def read_numbers(n: int) -> str:
-    ...
+    total = 0
+    count = 0
+
+    for _ in range(n):
+        try:
+            value = float(input("Enter a number: "))
+            total += value
+            count += 1
+        except ValueError:
+            pass  # Ignore non-numeric input
+
+    if count > 0:
+        average = total / count
+        return f"Avg: {average:.2f}\n{'-' * 12}"
+    else:
+        return "No numbers entered"
+
+
+# Test case
+result = read_numbers(5)
+print(result)
 
 
