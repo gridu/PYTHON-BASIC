@@ -11,15 +11,28 @@ Task:
 """
 
 
-def fibonacci_1(n):
-    a, b = 0, 1
-    for _ in range(n-1):
-        a, b = b, a + b
-    return b
+import pytest
 
+def test_fibonacci_functions(fibonacci_function):
+    test_cases = [
+        (0, 0),
+        (1, 1),
+        (2, 1),
+        (3, 2),
+        (4, 3),
+        (5, 5),
+        (6, 8),
+        (7, 13),
+        (8, 21)
+    ]
 
-def fibonacci_2(n):
-    fibo = [0, 1]
-    for i in range(1, n+1):
-        fibo.append(fibo[i-1] + fibo[i-2])
-    return fibo[n]
+    for n, expected_result in test_cases:
+        result = fibonacci_function(n)
+        assert result == expected_result
+
+@pytest.mark.parametrize("fibonacci_function", [fibonacci_1, fibonacci_2])
+def test_fibonacci_1(n):
+
+    result = fibonacci_1(n)
+    assert result == fibonacci_2(n)
+

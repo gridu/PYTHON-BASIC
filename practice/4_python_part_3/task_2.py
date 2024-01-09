@@ -9,11 +9,24 @@ Examples:
      >>> math_calculate('ceil', 10.7)
      11
 """
-import math
+import pytest
+from task import math_calculate, OperationNotFoundException
 
+def test_math_calculate_log():
+    result = math_calculate('log', 1024, 2)
+    assert result == 10.0
 
-def math_calculate(function: str, *args):
-    ...
+def test_math_calculate_ceil():
+    result = math_calculate('ceil', 10.7)
+    assert result == 11
+
+def test_math_calculate_invalid_operation():
+    with pytest.raises(OperationNotFoundException, match="Invalid operation: 'invalid'"):
+        math_calculate('invalid', 10)
+
+def test_math_calculate_invalid_arguments():
+    with pytest.raises(OperationNotFoundException, match="Invalid operation arguments"):
+        math_calculate('log', 'invalid_argument')
 
 
 """

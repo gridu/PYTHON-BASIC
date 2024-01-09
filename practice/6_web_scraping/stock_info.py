@@ -32,3 +32,50 @@ Links:
     - lxml docs: https://lxml.de/
 """
 
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+
+def fetch_stock_data(url):
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.text
+    else:
+        return None
+
+def parse_ceo_data(html):
+    soup = BeautifulSoup(html, 'html.parser')
+
+
+def parse_52_week_change_data(html):
+    soup = BeautifulSoup(html, 'html.parser')
+
+
+def parse_blackrock_holds_data(html):
+    soup = BeautifulSoup(html, 'html.parser')
+
+url = 'https://finance.yahoo.com/most-active'
+html_data = fetch_stock_data(url)
+
+if html_data:
+    ceo_sheet_data = parse_ceo_data(html_data)
+    print(ceo_sheet_data)
+
+    change_sheet_data = parse_52_week_change_data(html_data)
+    print(change_sheet_data)
+
+    blackrock_sheet_data = parse_blackrock_holds_data(html_data)
+    print(blackrock_sheet_data)
+
+
+def test_ceo_and_change_sheets():
+    url = 'https://finance.yahoo.com/most-active'
+    html_data = fetch_stock_data(url)
+
+    assert html_data is not None
+
+    ceo_sheet_data = parse_ceo_data(html_data)
+    assert len(ceo_sheet_data) == 5
+
+    change_sheet_data = parse_52_week_change_data(html_data)
+    assert len(change_sheet_data) == 10

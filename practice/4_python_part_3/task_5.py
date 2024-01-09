@@ -6,10 +6,34 @@ Examples:
      200, 'response data'
 """
 from typing import Tuple
-
+from unittest.mock import Mock, patch
+import urllib.request
 
 def make_request(url: str) -> Tuple[int, str]:
-    ...
+    try:
+        with urllib.request.urlopen(url) as response:
+            status_code = response.getcode()
+            data = response.read().decode('utf-8')
+            return status_code, data
+    except urllib.error.URLError as e:
+        return getattr(e, 'code', None), ''
+
+
+@patch('urllib.request.urlopen')
+def test_make_request(mock_urlopen):
+    mock_response = Mock()
+    mock_response.getcode.return_value = 200
+    mock_response.read.return_value = b'some text'
+    mock_urlopen.return_value = mock_response
+
+    url = 'https://www.example.com'
+    status_code, data = make_request(url)
+
+    assert status_code == 200
+    assert data == 'some text'
+    mock_urlopen.assert_called_once_with(url)
+
+
 
 
 """

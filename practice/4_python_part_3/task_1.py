@@ -10,12 +10,24 @@ If entered date is from future, return negative value for number of days
     >>> calculate_days('10-07-2021')
     WrongFormatException
 """
-from datetime import datetime
+import pytest
+from freezegun import freeze_time
+from task import calculate_days, WrongFormatException
 
+@freeze_time("2021-10-06")
+def test_calculate_days_past_date():
+    result = calculate_days('2021-10-07')
+    assert result == -1
 
-def calculate_days(from_date: str) -> int:
-    ...
+@freeze_time("2021-10-06")
+def test_calculate_days_future_date():
+    result = calculate_days('2021-10-05')
+    assert result == 1
 
+@freeze_time("2021-10-06")
+def test_calculate_days_wrong_format():
+    with pytest.raises(WrongFormatException, match="Wrong date format"):
+        calculate_days('10-07-2021')
 
 """
 Write tests for calculate_days function
