@@ -10,4 +10,11 @@ from typing import List
 
 
 def calculate_power_with_difference(ints: List[int]) -> List[int]:
-    ...
+    shifted = [0] + ints[:]
+    output = [a**2 - (b**2 - b) for a, b in zip(ints, shifted)]
+    return output
+
+
+if __name__ == '__main__':
+    assert calculate_power_with_difference([1, 2, 3]) == [1, 4, 7]
+    

@@ -13,4 +13,14 @@ from typing import Dict
 
 
 def set_to_dict(dict_to_update: Dict[str, int], **items_to_set) -> Dict:
-    ...
+    for k, v in items_to_set.items():
+        if (k not in dict_to_update) or (dict_to_update[k] < v):
+            dict_to_update[k] = v
+    return dict_to_update
+
+
+if __name__ == '__main__':
+    assert set_to_dict({'a': 1, 'b': 2, 'c': 3}, a=0, b=4) == {'a': 1, 'b': 4, 'c': 3}
+    assert set_to_dict({}, a=0) == {'a': 0}
+    assert set_to_dict({'a': 5}) == {'a': 5}
+    

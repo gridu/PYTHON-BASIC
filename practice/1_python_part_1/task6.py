@@ -20,5 +20,22 @@ from typing import Tuple
 
 
 def get_min_max(filename: str) -> Tuple[int, int]:
-    ...
+    max = None
+    min = None
+    with open(filename) as file:
+        for line in file:
+            n = int(line)
+            if max is None or max < n:
+                max = n
+            if min is None or min > n:
+                min = n
+    return (min, max)
 
+
+if __name__ == '__main__':
+    import os
+    with open('tmp.txt', 'x') as file:
+        file.write('10\n-2\n0\n34')
+    assert get_min_max('tmp.txt') == (-2, 34)
+    os.remove('tmp.txt')
+    
