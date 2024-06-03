@@ -10,6 +10,7 @@ Example:
         file1.txt (content: "abc\ndef\nxyz", encoding: UTF-8)
         file2.txt (content: "xyz,def,abc", encoding: CP1252)
 """
+from pathlib import Path
 
 
 def generate_words(n=20):
@@ -22,3 +23,16 @@ def generate_words(n=20):
         words.append(word)
 
     return words
+
+
+def main(path: Path) -> None:
+    words = generate_words()
+    with open(path / 'file1.txt', 'w', encoding='utf-8') as file:
+        file.write('\n'.join(words))
+    with open(path / 'file2.txt', 'w', encoding='cp1252') as file:
+        words.reverse()
+        file.write(','.join(words))
+
+
+if __name__ == '__main__':
+    main(Path('practice/_2_python_part_2'))

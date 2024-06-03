@@ -18,6 +18,20 @@ Examples:
 
 
 def read_numbers(n: int) -> str:
-    ...
+    sum = 0
+    count = 0
+    for _ in range(n):
+        line = input()
+        try:
+            sum += float(line)
+            count += 1
+        except:
+            pass
+    if count == 0:
+        print('No numbers entered')
+    else:
+        print(f'Avg: {sum / count:.2f}')
 
 
+if __name__ == '__main__':
+    read_numbers(5)
