@@ -13,12 +13,43 @@ Example:
 {"some_name": "Chad Baird", "fake-address": "62323 Hobbs Green\nMaryshire, WY 48636"}
 {"some_name": "Courtney Duncan", "fake-address": "8107 Nicole Orchard Suite 762\nJosephchester, WI 05981"}
 """
-
 import argparse
+from faker import Faker
+import pytest
+import sys
+from unittest.mock import patch
 
 
-def print_name_address(args: argparse.Namespace) -> None:
-    ...
+fake = Faker()
+
+
+class FakerProviderNotFoundException(Exception):
+    pass
+
+
+def print_fake_data(namespace: argparse.Namespace) -> None:
+    result = {}
+    for field in namespace.fields:
+        [key, provider] = field.split('=')
+        try: 
+            result[key] = fake.format(provider)
+        except AttributeError:
+            raise FakerProviderNotFoundException(provider)
+    print(result)
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(dest='number', type=int)
+    parser.add_argument(dest='fields', nargs='+')
+    args = [arg.replace('--', '') for arg in sys.argv[1:]]
+    namespace = parser.parse_args(args)
+    for _ in range(namespace.number):
+        print_fake_data(namespace)
+
+
+if __name__ == '__main__':
+    main()
 
 
 """
@@ -30,3 +61,21 @@ Example:
     >>> m.method()
     123
 """
+
+
+@pytest.mark.parametrize('test_input,is_valid', [
+    (['', '2', '--fake-address=address', '--some_name=name'], True),
+    (['', '1000', '--my_name=name'], True),
+    (['', '7', '--test=this_provider_does_not_exist'], False),
+    ([''], False)
+])
+def test_main(capfd, test_input, is_valid):
+    with patch('sys.argv', test_input):
+        if is_valid:
+            main()
+            out, err = capfd.readouterr()
+            assert len(out[:-1].split('\n')) == int(test_input[1])
+            assert err == ''
+        else:
+            with pytest.raises((FakerProviderNotFoundException, SystemExit)):
+                main()

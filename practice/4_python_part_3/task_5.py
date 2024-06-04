@@ -6,10 +6,13 @@ Examples:
      200, 'response data'
 """
 from typing import Tuple
+import urllib.request
+from unittest.mock import patch, Mock
 
 
 def make_request(url: str) -> Tuple[int, str]:
-    ...
+    response = urllib.request.urlopen(url)
+    return (response.status, response.read())
 
 
 """
@@ -24,3 +27,13 @@ Example:
     >>> m.method2()
     b'some text'
 """
+
+
+def test_make_request():
+    with patch('urllib.request.urlopen') as m:
+        m.return_value = Mock()
+        m.return_value.status = 200
+        m.return_value.read.return_value = b'some text'
+        code, response = make_request('https://www.google.com')
+        assert code == 200
+        assert response == b'some text'
