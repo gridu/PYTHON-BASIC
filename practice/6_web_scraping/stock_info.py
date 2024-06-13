@@ -31,4 +31,75 @@ Links:
     - beautiful soup docs: https://www.crummy.com/software/BeautifulSoup/bs4/doc/
     - lxml docs: https://lxml.de/
 """
+import scraper
 
+
+class Table:
+    def __init__(self, title: str, column_names: list[str], data: list[list[str]]) -> None:
+        self.title = title
+        self.column_names = column_names
+        self.data = data
+
+    def _render_row(widths: list[int], data: list[str]) -> str:
+        padded_data = [f' {s} ' for s in data]
+        aligned_data = [f'{s : <{w+2}}' for w, s in zip(widths, padded_data)]
+        return f'|{"|".join(aligned_data)}|'
+    
+    def __str__(self) -> str:
+        result = ''
+        widths = []
+        for index, column in enumerate(self.column_names):
+            max_width = max([len(row[index]) for row in self.data] + [len(column)])
+            widths.append(max_width)
+        total_width = len(Table._render_row(widths, self.column_names))
+        result += f'{f'_{self.title.replace(' ', '_')}_' : ^{total_width}}'.replace(' ', '=').replace('_', ' ') + '\n'
+        result += Table._render_row(widths, self.column_names) + '\n'
+        for row in self.data:
+            result += '-' * total_width + '\n'
+            result += Table._render_row(widths, row) + '\n'
+        result += '-' * total_width + '\n'
+        return result
+
+
+class Sheet1(Table):
+    def __init__(self):
+        self.title = '5 stocks with most youngest CEOs'
+        self.column_names = ['Name', 'Code', 'Country', 'Employees', 'CEO Name', 'CEO Year Born']
+        rows = scraper.get_sheet1_data()
+        rows = sorted(rows, key=lambda row: row[-1], reverse=True)
+        rows = rows[:5]
+        self.data = rows
+
+
+class Sheet2(Table):
+    def __init__(self):
+        self.title = '10 stocks with best 52-Week Change'
+        self.column_names = ['Name', 'Code', '52-Week Change', 'Total Cash']
+        rows = scraper.get_sheet2_data()
+        rows = [r for r in rows if r[2] != '-']
+        rows = sorted(rows, key=lambda row: float(row[2][:-1]), reverse=True)
+        rows = rows[:10]
+        self.data = rows
+
+
+class Sheet3(Table):
+    def __init__(self):
+        self.title = '10 largest holds of Blackrock Inc.'
+        self.column_names = ['Name', 'Code', 'Shares', 'Date Reported', '% Out', 'Value']
+        rows = scraper.get_sheet3_data()
+        rows = sorted(rows, key=lambda row: float(row[4][:-1]), reverse=True)
+        rows = rows[:10]
+        self.data = rows
+
+
+def main():
+    sheet1 = Sheet1()
+    print(sheet1)
+    sheet2 = Sheet2()
+    print(sheet2)
+    sheet3 = Sheet3()
+    print(sheet3)
+
+
+if __name__ == '__main__':
+    main()
