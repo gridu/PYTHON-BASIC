@@ -17,8 +17,21 @@ with open(filename) as opened_file:
         ...
 """
 from typing import Tuple
+import sys
 
 
 def get_min_max(filename: str) -> Tuple[int, int]:
-    ...
+    with open(filename) as opened_file:
+        max = -sys.maxsize-1
+        min = sys.maxsize
+        for line in opened_file:
+            if(int(line) > max):
+                max = int(line)
+            elif(int(line) < min):
+                min = int(line)
+
+    return [min,max]
+
+print(get_min_max("textfile.txt"))
+            
 

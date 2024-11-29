@@ -11,7 +11,6 @@ Example:
         file2.txt (content: "xyz,def,abc", encoding: CP1252)
 """
 
-
 def generate_words(n=20):
     import string
     import random
@@ -22,3 +21,24 @@ def generate_words(n=20):
         words.append(word)
 
     return words
+
+def write_to_file_utf(path):
+    table = generate_words()
+    while(True):
+        filepath = str(path)+ "/file_1.txt"
+        with open(filepath, "w", encoding="UTF-8") as w:
+            w.write("\n".join(table))
+        break
+
+
+def write_to_file_cp1252(path):
+    table = generate_words()
+    while(True):
+        filepath = str(path)+ "/file_1.txt"
+        with open(filepath, "w", encoding="CP1252") as w:
+            w.write(", ".join(reversed(table)))
+        break
+
+
+write_to_file_utf("files")
+write_to_file_cp1252("files")

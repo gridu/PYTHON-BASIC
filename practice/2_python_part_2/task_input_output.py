@@ -16,8 +16,20 @@ Examples:
 
 """
 
+def read_numbers(n: int) -> None:
+    numbers = []
+    sum = 0
 
-def read_numbers(n: int) -> str:
-    ...
+    for i in range(n):
+        user_input = input(f"Enter number {i+1}: ")
+        if user_input.isdigit():
+            numbers.append(int(user_input))
 
+    if len(numbers) > 0:
+        for number in numbers:
+            sum += number
+        print('Avg:', sum / len(numbers))
+    else:
+        print("No numbers entered")
 
+read_numbers(5)
