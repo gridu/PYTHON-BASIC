@@ -15,4 +15,8 @@ from typing import List, Any
 
 
 def delete_from_list(list_to_clean: List, item_to_delete: Any) -> List:
-    ...
+    cleaned_list = []
+    for item in list_to_clean:
+        if item != item_to_delete:
+            cleaned_list.append(item)
+    return cleaned_list

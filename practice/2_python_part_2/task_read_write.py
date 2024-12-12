@@ -13,3 +13,11 @@ Example:
 
     result.txt(content: "23, 78, 3")
 """
+
+result = ''
+for i in range(1, 21):
+    with open(f'files/file_{i}.txt', 'r') as f:
+        result += f.read() + ', '
+result = result[:-2]
+with open(f'files/result.txt', 'w') as f:
+    f.write(result)

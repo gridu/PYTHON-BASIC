@@ -22,3 +22,10 @@ def generate_words(n=20):
         words.append(word)
 
     return words
+
+generated_words = generate_words()
+with open('file1.txt', 'w', encoding='utf-8') as f:
+    f.write('\n'.join(generated_words))
+generated_words.reverse()
+with open('file2.txt', 'w', encoding='cp1252') as f:
+    f.write(', '.join(generated_words)[:-2])
