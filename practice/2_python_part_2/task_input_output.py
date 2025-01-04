@@ -32,6 +32,3 @@ def read_numbers(n: int) -> str:
     else:
         return str('No numbers entered')
 print(read_numbers(5))
-
-
-

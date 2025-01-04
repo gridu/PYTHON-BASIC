@@ -10,17 +10,14 @@ Example:
         file1.txt (content: "abc\ndef\nxyz", encoding: UTF-8)
         file2.txt (content: "xyz,def,abc", encoding: CP1252)
 """
-
+import string
+import random
 
 def generate_words(n=20):
-    import string
-    import random
-
     words = list()
     for _ in range(n):
         word = ''.join(random.choices(string.ascii_lowercase, k=random.randint(3, 10)))
         words.append(word)
-
     return words
 
 generated_words = generate_words()
