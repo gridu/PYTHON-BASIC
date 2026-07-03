@@ -204,4 +204,65 @@ Practice tests live mainly in `practice/m3_python_testing/` and `practice/m6_web
 pytest capstone/
 ```
 
+### Single file or test
+
+```bash
+pytest practice/m3_python_testing/test_task_classes.py
+pytest capstone/test_app.py
+pytest practice/m3_python_testing/test_task_parametrize.py::test_fibonacci_2
+pytest practice/m3_python_testing/test_task_classes.py::TestTeacher::test_init
+```
+
+### Useful pytest options
+
+```bash
+pytest -v          # verbose output
+pytest -q          # quiet output
+pytest -x          # stop on first failure
+pytest --collect-only   # list tests without running them
+```
+
+### Running tests for a specific task
+
+Not every module has automated tests. Use the table below to run tests for the task you are working on.
+
+| Module | Task / topic | What to run |
+|--------|----------------|-------------|
+| **m1** | `task1`–`task6` | No automated tests — run scripts manually, e.g. `python practice/m1_python_part_1/task1.py` |
+| **m2** | `task_read_write` | `pytest practice/m3_python_testing/test_read_write.py` |
+| **m2** | `task_read_write_2` | `pytest practice/m3_python_testing/test_read_write_2.py` |
+| **m2** | `task_exceptions` | `pytest practice/m3_python_testing/test_task_exceptions.py` |
+| **m2** | `task_input_output` | `pytest practice/m3_python_testing/test_task_input_output.py` |
+| **m2** | `task_classes` | `pytest practice/m3_python_testing/test_task_classes.py` |
+| **m3** | All testing exercises | `pytest practice/m3_python_testing/` |
+| **m3** | Parametrize (`test_task_parametrize`) | `pytest practice/m3_python_testing/test_task_parametrize.py` |
+| **m4** | `task_1` | `pytest practice/m4_python_part_3/task_1.py` |
+| **m4** | `task_2` | `pytest practice/m4_python_part_3/task_2.py` |
+| **m4** | `task_3` | `pytest practice/m4_python_part_3/task_3.py` |
+| **m4** | `task_4` | `pytest practice/m4_python_part_3/task_4.py` |
+| **m4** | `task_5` | `pytest practice/m4_python_part_3/task_5.py` |
+| **m4** | All m4 tasks | `pytest practice/m4_python_part_3/` |
+| **m5** | XML parsing (`parsing_serialization_task`) | `python practice/m5_additional_topics/parsing_serialization_task/tests/validate_xml.py` |
+| **m6** | Web scraping | `pytest practice/m6_web_scraping/test_scraper.py` |
+| **m7** | Fibonacci / APOD API | No automated tests — run templates manually (see [Running commands](#running-commands)) |
+| **capstone** | Console Data Generator | `pytest capstone/test_app.py` |
+
+**Examples — run one test inside a file:**
+
+```bash
+# Single test function
+pytest practice/m3_python_testing/test_task_exceptions.py::test_division_by_zero
+
+# Single test method in a test class
+pytest practice/m3_python_testing/test_task_classes.py::TestStudent::test_is_active_before_dealine
+
+# Single parametrized case (by index)
+pytest practice/m3_python_testing/test_task_parametrize.py::test_fibonacci_2[3]
+
+# Single capstone test
+pytest capstone/test_app.py::test_inline_arguments
+```
+
+**Note:** m2 tasks are tested via files in `practice/m3_python_testing/` — that module contains the tests you write (or run) for m2 homework.
+
 ---
