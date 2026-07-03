@@ -38,7 +38,7 @@ def temp_output_dir(tmp_path):
             "type": " partner",
             "age": 45,
         }
-        file_path = tmp_path / f"mock_data_{i}.json"
+        file_path = tmp_path / f"mock_data_{i}.jsonl"
         file_path.write_text(json.dumps(mock_data))
     file_path = tmp_path / "random_file.txt"
     file_path.write_text("Lorem Ipsum")
@@ -210,13 +210,13 @@ def test_clear_path(monkeypatch, temp_output_dir):
     )
 
     # names from fixture probably it could be automated
-    json_file_path = temp_output_dir / "mock_data_2.json"
+    jsonl_file_path = temp_output_dir / "mock_data_2.jsonl"
     random_file_path = temp_output_dir / "random_file.txt"
 
     assert temp_output_dir.exists()
     assert temp_output_dir.is_dir()
 
-    assert not json_file_path.exists()
+    assert not jsonl_file_path.exists()
     assert random_file_path.exists()
 
     files_in_dir = len([item for item in temp_output_dir.iterdir() if item.is_file()])
@@ -241,7 +241,7 @@ def test_create_list_of_output_files_paths(temp_output_dir, clean_args_factory):
 
     assert len(output_files_paths) == 3
     assert output_files_paths == [
-        temp_output_dir / f"mock_data_{i + 1}.json" for i in range(3)
+        temp_output_dir / f"mock_data_{i + 1}.jsonl" for i in range(3)
     ]
 
 
@@ -263,12 +263,12 @@ def test_perform_file_generation(temp_output_dir, clean_args_factory):
 
     orchestrate_data_generation(clean_args=args_clean)
 
-    json_file_path = temp_output_dir / "mock_data_2.json"
+    jsonl_file_path = temp_output_dir / "mock_data_2.jsonl"
 
     assert temp_output_dir.exists()
     assert temp_output_dir.is_dir()
 
-    assert json_file_path.exists()
+    assert jsonl_file_path.exists()
 
     files_in_dir_after = len(
         [item for item in temp_output_dir.iterdir() if item.is_file()]
@@ -297,12 +297,12 @@ def test_perform_file_generation_with_multiprocessing(
 
     orchestrate_data_generation(clean_args=args_clean)
 
-    json_file_path = temp_output_dir / "mock_data_2.json"
+    jsonl_file_path = temp_output_dir / "mock_data_2.jsonl"
 
     assert temp_output_dir.exists()
     assert temp_output_dir.is_dir()
 
-    assert json_file_path.exists()
+    assert jsonl_file_path.exists()
 
     files_in_dir_after = len(
         [item for item in temp_output_dir.iterdir() if item.is_file()]

@@ -49,7 +49,7 @@ def create_list_of_output_files_paths(
         case "uuid":
             prefixes = [str(uuid.uuid4()) for _ in range(files_to_create)]
     output_files = [
-        output_dir_path / f"{output_dir_path}" / f"{file_name}_{prefixes[i]}.json"
+        output_dir_path / f"{output_dir_path}" / f"{file_name}_{prefixes[i]}.jsonl"
         for i in range(files_to_create)
     ]
     return output_files

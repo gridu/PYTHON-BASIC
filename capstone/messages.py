@@ -7,21 +7,21 @@ Accepts two path formats:
                Example: '/var/log/generator' or 'C:\\Data\\Output'"""
 
 FILES_COUNT_HELP = """\
-The number of JSON files to generate.
+The number of JSONL files to generate.
 Rules:
   * Count > 0  : Generates the specified number of files.
   * Count == 0 : Disables file writing; outputs all data directly to the console.
   * Count < 0  : Invalid input. Will throw an error and terminate execution."""
 
 FILE_NAME_HELP = """\
-The base name for the generated JSON files.
-  * Without prefix: Saves directly as '[file_name].json'
-  * With prefix   : Saves as '[file_name]_[file_prefix].json'"""
+The base name for the generated JSONL files.
+  * Without prefix: Saves directly as '[file_name].jsonl'
+  * With prefix   : Saves as '[file_name]_[file_prefix].jsonl'"""
 
 FILE_PREFIX_HELP = """\
 The naming modifier applied when more than 1 file is being generated.
 Must be chosen from the following explicit set:
-  * count  : Appends an incrementing index (e.g., base_1.json, base_2.json)
+  * count  : Appends an incrementing index (e.g., base_1.jsonl, base_2.jsonl)
   * random : Appends a random modifier
   * uuid   : Appends a completely unique UUID string identifier"""
 
@@ -81,7 +81,7 @@ COMPLETE VALID SCHEMA EXAMPLE:
 """
 
 DATA_LINES_HELP = """\
-The number of data rows/event lines to generate inside each JSON file.
+The number of data rows/event lines to generate inside each JSONL file.
 Must be a positive integer greater than 0."""
 
 CLEAR_PATH_HELP = """\
