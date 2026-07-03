@@ -63,7 +63,7 @@ class CleanArgs(BaseModel):
                             )
                             sys.exit(1)
                     else:
-                        # standalone value is allways allowed for strings
+                        # standalone value is always allowed for strings
                         pass
 
                 case "int":
@@ -82,7 +82,7 @@ class CleanArgs(BaseModel):
                         except (ValueError, IndexError):
                             print(
                                 f"Error: Invalid range boundaries in '{instruction}' for key '{key}'. "
-                                f"Values must be integers and second number must be geater or equal than first ",
+                                f"Values must be integers and second number must be greater than or equal to the first ",
                                 file=sys.stderr,
                             )
                             sys.exit(1)
@@ -101,7 +101,7 @@ class CleanArgs(BaseModel):
                             sys.exit(1)
 
                     else:
-                        # standalone value must be convertable to int
+                        # standalone value must be convertible to int
                         try:
                             int(instruction)
                         except ValueError:
@@ -113,7 +113,7 @@ class CleanArgs(BaseModel):
                             sys.exit(1)
 
                 case "timestamp":
-                    # timestamp should ignore enything that comes after ':'
+                    # timestamp should ignore anything that comes after ':'
                     logging.warning(
                         f"Note: 'timestamp' type for key '{key}' does not support extra expressions. "
                         f"The instruction '{instruction}' will be ignored and current UNIX timestamp will be used."

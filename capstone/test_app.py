@@ -5,14 +5,14 @@ from pathlib import Path
 
 import pytest
 
-from capstone.argmunets_cleaning import (
+from capstone.arguments_cleaning import (
     gather_args_and_config_parser,
     get_clean_arguments,
 )
 from capstone.data_generation import (
     create_list_of_output_files_paths,
     orchestrate_data_generation,
-    prepere_output_direcotry,
+    prepare_output_directory,
 )
 from capstone.model import CleanArgs
 
@@ -45,7 +45,7 @@ def temp_output_dir(tmp_path):
     return tmp_path
 
 
-# TEST SUCCESES ARG PARSING
+# TEST SUCCESSES ARG PARSING
 
 
 def test_absolute_defaults(monkeypatch):
@@ -205,11 +205,11 @@ def test_clear_path(monkeypatch, temp_output_dir):
     args_raw = gather_args_and_config_parser()
     args_clean = get_clean_arguments(args_raw)
 
-    prepere_output_direcotry(
+    prepare_output_directory(
         args_clean.abs_path_to_save, args_clean.file_name, args_clean.clear_path
     )
 
-    # names from fixture propably it could be automated
+    # names from fixture probably it could be automated
     json_file_path = temp_output_dir / "mock_data_2.json"
     random_file_path = temp_output_dir / "random_file.txt"
 
@@ -228,7 +228,7 @@ def test_create_list_of_output_files_paths(temp_output_dir, clean_args_factory):
         abs_path_to_save=str(temp_output_dir), files_count=3
     )
 
-    prepere_output_direcotry(
+    prepare_output_directory(
         args_clean.abs_path_to_save, args_clean.file_name, args_clean.clear_path
     )
 
@@ -253,7 +253,7 @@ def test_perform_file_generation(temp_output_dir, clean_args_factory):
         file_name="mock_data",
     )
 
-    prepere_output_direcotry(
+    prepare_output_directory(
         args_clean.abs_path_to_save, args_clean.file_name, args_clean.clear_path
     )
 
@@ -287,7 +287,7 @@ def test_perform_file_generation_with_multiprocessing(
         multiprocessing=2,
     )
 
-    prepere_output_direcotry(
+    prepare_output_directory(
         args_clean.abs_path_to_save, args_clean.file_name, args_clean.clear_path
     )
 

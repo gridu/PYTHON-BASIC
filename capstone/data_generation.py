@@ -11,16 +11,16 @@ from typing import Any, Callable, Dict, List, Literal, Tuple
 from capstone.model import CleanArgs
 
 
-class OutputDirectoryNotPrepered(Exception):
+class OutputDirectoryNotPrepared(Exception):
     pass
 
 
-def prepere_output_direcotry(
-    output_dir_path_str: str, file_name: str, clean_reqiured: bool
+def prepare_output_directory(
+    output_dir_path_str: str, file_name: str, clean_required: bool
 ):
     output_dir_path = Path(output_dir_path_str)
     if output_dir_path.exists() and output_dir_path.is_dir():
-        if clean_reqiured:
+        if clean_required:
             del_count = 0
             for item in output_dir_path.iterdir():
                 if item.is_file() and item.name.startswith(file_name):
@@ -44,7 +44,7 @@ def create_list_of_output_files_paths(
         case "count":
             prefixes = [i for i in range(1, files_to_create + 1)]
         case "random":
-            # there is no definiton in docs what random menas so i will do this:
+            # there is no definition in docs what random means so i will do this:
             prefixes = random.sample(range(1, 500), k=files_to_create)
         case "uuid":
             prefixes = [str(uuid.uuid4()) for _ in range(files_to_create)]
@@ -55,7 +55,7 @@ def create_list_of_output_files_paths(
     return output_files
 
 
-# Workers helper function. Shared between File WOrkers and Console workers
+# Workers helper function. Shared between File Workers and Console workers
 def _compile_generators(
     data_schema: Dict[str, str],
 ) -> List[Tuple[str, Callable[[], Any]]]:
@@ -98,8 +98,8 @@ def create_file(
     output_path: Path, data_schema: Dict[str, str], num_of_lines: int
 ) -> str:
     if not output_path.parent.exists():
-        raise OutputDirectoryNotPrepered(
-            "You propably forgot to run prepere_output_direcotry function before creating files"
+        raise OutputDirectoryNotPrepared(
+            "You probably forgot to run prepare_output_directory function before creating files"
         )
     generators = _compile_generators(data_schema)
 
@@ -108,7 +108,7 @@ def create_file(
             row_data = {key: gen() for key, gen in generators}
             file.write(json.dumps(row_data) + "\n")
 
-    return f"INFO: Succesfully created file: {output_path}"
+    return f"INFO: Successfully created file: {output_path}"
 
 
 # Console Worker (not worker anymore but lets keep it that way)
