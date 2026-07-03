@@ -1,3 +1,4 @@
+annotated-types==0.7.0
 beautifulsoup4==4.15.0
 certifi==2026.6.17
 cfgv==3.5.0
@@ -20,6 +21,8 @@ packaging==26.2
 platformdirs==4.10.0
 pluggy==1.6.0
 pre_commit==4.6.0
+pydantic==2.13.4
+pydantic_core==2.46.4
 Pygments==2.20.0
 pytest==9.1.0
 pytest-freezegun==0.4.2
@@ -31,6 +34,7 @@ ruff==0.15.20
 setuptools==82.0.1
 six==1.17.0
 soupsieve==2.8.4
+typing-inspection==0.4.2
 typing_extensions==4.15.0
 urllib3==2.7.0
 virtualenv==21.5.1
