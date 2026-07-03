@@ -149,6 +149,19 @@ def test_negative_multiprocessing_raises_cli_error(monkeypatch, capsys):
     assert "Error: Invalid value for --multiprocessing" in captured.err
 
 
+def test_negative_data_lines_raises_cli_error(monkeypatch, capsys):
+    monkeypatch.setattr(sys, "argv", ["main.py", "--data_lines", "-5"])
+
+    args_raw = gather_args_and_config_parser()
+
+    with pytest.raises(SystemExit) as sample_exit:
+        get_clean_arguments(args_raw)
+
+    assert sample_exit.value.code == 1
+    captured = capsys.readouterr()
+    assert "Error: Invalid value for --data_lines" in captured.err
+
+
 @pytest.mark.parametrize(
     "bad_schema",
     ['{"age": "int:head"}', '{"name": "str:rand(1,10)"}', '{"num": "int:[abc,3]"}'],
