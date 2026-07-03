@@ -8,3 +8,6 @@ practice/m7_concurrency/task2_apod_api/output/
 .DS_Store
 
 .env
+
+capstone/output/*.json
+capstone/output/*.jsonl
