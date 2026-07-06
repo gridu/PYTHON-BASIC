@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 import sys
 from pathlib import Path
@@ -123,61 +124,60 @@ def test_various_correct_schemas(monkeypatch, correct_schema):
 # TEST FAILURES ARG PARSING
 
 
-def test_negative_files_count_raises_cli_error(monkeypatch, capsys):
+def test_negative_files_count_raises_cli_error(monkeypatch, caplog):
     monkeypatch.setattr(sys, "argv", ["main.py", "--files_count", "-5"])
 
     args_raw = gather_args_and_config_parser()
 
-    with pytest.raises(SystemExit) as sample_exit:
-        get_clean_arguments(args_raw)
+    with caplog.at_level(logging.ERROR):
+        with pytest.raises(SystemExit) as sample_exit:
+            get_clean_arguments(args_raw)
 
     assert sample_exit.value.code == 1
-    captured = capsys.readouterr()
-    assert "Error: Invalid value for --files_count" in captured.err
+    assert "Error: Invalid value for --files_count" in caplog.text
 
 
-def test_negative_multiprocessing_raises_cli_error(monkeypatch, capsys):
+def test_negative_multiprocessing_raises_cli_error(monkeypatch, caplog):
     monkeypatch.setattr(sys, "argv", ["main.py", "--multiprocessing", "-5"])
 
     args_raw = gather_args_and_config_parser()
 
-    with pytest.raises(SystemExit) as sample_exit:
-        get_clean_arguments(args_raw)
+    with caplog.at_level(logging.ERROR):
+        with pytest.raises(SystemExit) as sample_exit:
+            get_clean_arguments(args_raw)
 
     assert sample_exit.value.code == 1
-    captured = capsys.readouterr()
-    assert "Error: Invalid value for --multiprocessing" in captured.err
+    assert "Error: Invalid value for --multiprocessing" in caplog.text
 
 
-def test_negative_data_lines_raises_cli_error(monkeypatch, capsys):
+def test_negative_data_lines_raises_cli_error(monkeypatch, caplog):
     monkeypatch.setattr(sys, "argv", ["main.py", "--data_lines", "-5"])
 
     args_raw = gather_args_and_config_parser()
 
-    with pytest.raises(SystemExit) as sample_exit:
-        get_clean_arguments(args_raw)
+    with caplog.at_level(logging.ERROR):
+        with pytest.raises(SystemExit) as sample_exit:
+            get_clean_arguments(args_raw)
 
     assert sample_exit.value.code == 1
-    captured = capsys.readouterr()
-    assert "Error: Invalid value for --data_lines" in captured.err
+    assert "Error: Invalid value for --data_lines" in caplog.text
 
 
 @pytest.mark.parametrize(
     "bad_schema",
     ['{"age": "int:head"}', '{"name": "str:rand(1,10)"}', '{"num": "int:[abc,3]"}'],
 )
-def test_corrupt_schema_syntax_errors(monkeypatch, capsys, bad_schema):
+def test_corrupt_schema_syntax_errors(monkeypatch, caplog, bad_schema):
     monkeypatch.setattr(sys, "argv", ["main.py", "--data_schema", bad_schema])
 
     args_raw = gather_args_and_config_parser()
 
-    with pytest.raises(SystemExit) as sample_exit:
-        get_clean_arguments(args_raw)
+    with caplog.at_level(logging.ERROR):
+        with pytest.raises(SystemExit) as sample_exit:
+            get_clean_arguments(args_raw)
 
     assert sample_exit.value.code == 1
-
-    captured = capsys.readouterr()
-    assert "Error:" in captured.err
+    assert "Error:" in caplog.text
 
 
 # TEST COMPONENTS
@@ -264,6 +264,7 @@ def test_perform_file_generation(temp_output_dir, clean_args_factory):
         files_count=3,
         clear_path=True,
         file_name="mock_data",
+        data_lines=15,
     )
 
     prepare_output_directory(
@@ -287,6 +288,11 @@ def test_perform_file_generation(temp_output_dir, clean_args_factory):
         [item for item in temp_output_dir.iterdir() if item.is_file()]
     )
     assert files_in_dir_after == files_in_dir_before + 3
+
+    with open(jsonl_file_path, "r", encoding="utf-8") as f:
+        actual_lines = sum(1 for line in f)
+
+    assert actual_lines == 15
 
 
 def test_perform_file_generation_with_multiprocessing(
@@ -298,6 +304,7 @@ def test_perform_file_generation_with_multiprocessing(
         clear_path=True,
         file_name="mock_data",
         multiprocessing=2,
+        data_lines=15,
     )
 
     prepare_output_directory(
@@ -321,3 +328,37 @@ def test_perform_file_generation_with_multiprocessing(
         [item for item in temp_output_dir.iterdir() if item.is_file()]
     )
     assert files_in_dir_after == files_in_dir_before + 3
+
+    with open(jsonl_file_path, "r", encoding="utf-8") as f:
+        actual_lines = sum(1 for line in f)
+
+    assert actual_lines == 15
+
+
+def test_files_count_equal_0(temp_output_dir, clean_args_factory, capsys, caplog):
+    args_clean = clean_args_factory(
+        abs_path_to_save=str(temp_output_dir),
+        files_count=0,
+        data_lines=3,
+    )
+
+    prepare_output_directory(
+        args_clean.abs_path_to_save, args_clean.file_name, args_clean.clear_path
+    )
+
+    files_in_dir_before = len(
+        [item for item in temp_output_dir.iterdir() if item.is_file()]
+    )
+
+    with caplog.at_level(logging.INFO):
+        orchestrate_data_generation(clean_args=args_clean)
+
+    files_in_dir_after = len(
+        [item for item in temp_output_dir.iterdir() if item.is_file()]
+    )
+
+    assert files_in_dir_before == files_in_dir_after
+
+    out, _ = capsys.readouterr()
+    assert "id" in out
+    assert "Successfully streamed data chunk to console." in caplog.text

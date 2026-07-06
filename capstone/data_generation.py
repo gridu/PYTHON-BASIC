@@ -1,10 +1,11 @@
 import ast
 import json
+import logging
+import multiprocessing
 import random
 import sys
 import time
 import uuid
-from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Literal, Tuple
 
@@ -19,17 +20,22 @@ def prepare_output_directory(
     output_dir_path_str: str, file_name: str, clean_required: bool
 ):
     output_dir_path = Path(output_dir_path_str)
-    if output_dir_path.exists() and output_dir_path.is_dir():
+    if output_dir_path.exists() and output_dir_path.is_file():
+        logging.error(
+            f"There arleady exists file {output_dir_path_str}. It's not possible to create output directory there"
+        )
+        sys.exit(1)
+    elif output_dir_path.is_dir():
         if clean_required:
             del_count = 0
             for item in output_dir_path.iterdir():
                 if item.is_file() and item.name.startswith(file_name):
                     item.unlink()
                     del_count += 1
-            print(f"INFO: Deleted {del_count} files from {output_dir_path}")
+            logging.info(f"Deleted {del_count} files from {output_dir_path}")
     else:
         output_dir_path.mkdir(parents=True, exist_ok=True)
-        print("INFO: Output directory didn't exist, so it was created.")
+        logging.info("Output directory didn't exist, so it was created.")
 
 
 def create_list_of_output_files_paths(
@@ -48,10 +54,13 @@ def create_list_of_output_files_paths(
             prefixes = random.sample(range(1, 500), k=files_to_create)
         case "uuid":
             prefixes = [str(uuid.uuid4()) for _ in range(files_to_create)]
-    output_files = [
-        output_dir_path / f"{output_dir_path}" / f"{file_name}_{prefixes[i]}.jsonl"
-        for i in range(files_to_create)
-    ]
+    if files_to_create == 1:
+        output_files = [output_dir_path / f"{file_name}.jsonl"]
+    else:
+        output_files = [
+            output_dir_path / f"{file_name}_{prefixes[i]}.jsonl"
+            for i in range(files_to_create)
+        ]
     return output_files
 
 
@@ -108,7 +117,7 @@ def create_file(
             row_data = {key: gen() for key, gen in generators}
             file.write(json.dumps(row_data) + "\n")
 
-    return f"INFO: Successfully created file: {output_path}"
+    return f"Successfully created file: {output_path}"
 
 
 # Console Worker (not worker anymore but lets keep it that way)
@@ -121,7 +130,7 @@ def print_schema_to_console(data_schema: Dict[str, str], num_of_lines: int) -> s
 
         sys.stdout.write(line_str)
 
-    print("INFO: Successfully streamed data chunk to console.")
+    logging.info("Successfully streamed data chunk to console.")
 
 
 def perform_file_generation(clean_args: CleanArgs):
@@ -132,19 +141,20 @@ def perform_file_generation(clean_args: CleanArgs):
         clean_args.files_count,
     )
 
-    with ProcessPoolExecutor(max_workers=clean_args.multiprocessing) as executor:
-        futures = [
-            executor.submit(
-                create_file, path, clean_args.data_schema, clean_args.data_lines
-            )
-            for path in output_files_paths
-        ]
-        for future in as_completed(futures):
-            try:
-                result = future.result()
-                print(result)
-            except Exception as e:
-                print(f"ERROR: Worker crashed with error: {e}", file=sys.stderr)
+    tasks = [
+        (path, clean_args.data_schema, clean_args.data_lines)
+        for path in output_files_paths
+    ]
+
+    with multiprocessing.Pool(processes=clean_args.multiprocessing) as pool:
+        try:
+            results = pool.starmap(create_file, tasks)
+
+            for result in results:
+                logging.info(result)
+        except Exception:
+            logging.error("Worker crashed during task")
+            sys.exit(1)
 
 
 def orchestrate_data_generation(clean_args: CleanArgs):

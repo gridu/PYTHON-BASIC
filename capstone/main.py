@@ -1,3 +1,5 @@
+import logging
+
 from capstone.arguments_cleaning import (
     gather_args_and_config_parser,
     get_clean_arguments,
@@ -8,7 +10,13 @@ from capstone.data_generation import (
 )
 
 
+def configure_logging() -> None:
+    logging.basicConfig(level=logging.INFO)
+
+
 def main():
+    configure_logging()
+
     args_raw = gather_args_and_config_parser()
     args_clean = get_clean_arguments(args_raw)
 
@@ -17,8 +25,6 @@ def main():
     )
 
     orchestrate_data_generation(clean_args=args_clean)
-
-    # TODO somehow make it work with provided dataschemas
 
 
 if __name__ == "__main__":

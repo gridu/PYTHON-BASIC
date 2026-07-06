@@ -15,16 +15,15 @@ class CleanArgs(BaseModel):
     data_schema: Dict[str, str]
     data_lines: int = Field(ge=0)
     clear_path: bool = False
-    multiprocessing: int = Field(g=0)
+    multiprocessing: int = Field(ge=1)
 
     @field_validator("data_schema")
     @classmethod
     def validate_schema_structure(cls, schema: Dict[str, str]) -> Dict[str, str]:
         for key, value in schema.items():
             if ":" not in value:
-                print(
-                    f"Error: Invalid schema for key '{key}'. Value '{value}' is missing the ':' separator.",
-                    file=sys.stderr,
+                logging.error(
+                    f"Error: Invalid schema for key '{key}'. Value '{value}' is missing the ':' separator."
                 )
                 sys.exit(1)
             data_type, instruction = value.split(":", 1)
@@ -43,10 +42,9 @@ class CleanArgs(BaseModel):
 
                     elif instruction.startswith("rand("):
                         # str:rand(from,to) not allowed, that bracket rand is reserved for ints
-                        print(
+                        logging.error(
                             f"Error: 'rand(from, to)' notation is only compatible with 'int' type. "
-                            f"Key '{key}' cannot use it with 'str'.",
-                            file=sys.stderr,
+                            f"Key '{key}' cannot use it with 'str'."
                         )
                         sys.exit(1)
 
@@ -57,9 +55,8 @@ class CleanArgs(BaseModel):
                             if not isinstance(parsed_list, list):
                                 raise ValueError
                         except (ValueError, SyntaxError):
-                            print(
-                                f"Error: Invalid list format for key '{key}': '{instruction}'",
-                                file=sys.stderr,
+                            logging.error(
+                                f"Error: Invalid list format for key '{key}': '{instruction}'"
                             )
                             sys.exit(1)
                     else:
@@ -80,10 +77,9 @@ class CleanArgs(BaseModel):
                             if num_from > num_to:
                                 raise ValueError()
                         except (ValueError, IndexError):
-                            print(
+                            logging.error(
                                 f"Error: Invalid range boundaries in '{instruction}' for key '{key}'. "
-                                f"Values must be integers and second number must be greater than or equal to the first ",
-                                file=sys.stderr,
+                                f"Values must be integers and second number must be greater than or equal to the first "
                             )
                             sys.exit(1)
 
@@ -94,9 +90,8 @@ class CleanArgs(BaseModel):
                             if not isinstance(parsed_list, list):
                                 raise ValueError
                         except (ValueError, SyntaxError):
-                            print(
-                                f"Error: Invalid list format for key '{key}': '{instruction}'",
-                                file=sys.stderr,
+                            logging.error(
+                                f"Error: Invalid list format for key '{key}': '{instruction}'"
                             )
                             sys.exit(1)
 
@@ -105,10 +100,9 @@ class CleanArgs(BaseModel):
                         try:
                             int(instruction)
                         except ValueError:
-                            print(
+                            logging.error(
                                 f"Error: Standalone value '{instruction}' for key '{key}' "
-                                f"cannot be converted to 'int' type.",
-                                file=sys.stderr,
+                                f"cannot be converted to 'int' type."
                             )
                             sys.exit(1)
 
@@ -121,10 +115,9 @@ class CleanArgs(BaseModel):
 
                 case _:
                     # Unknown type
-                    print(
+                    logging.error(
                         f"Error: Unsupported type '{data_type}' for key '{key}'. "
-                        f"Allowed types are 'str', 'int', or 'timestamp'.",
-                        file=sys.stderr,
+                        f"Allowed types are 'str', 'int', or 'timestamp'."
                     )
                     sys.exit(1)
 
@@ -134,10 +127,8 @@ class CleanArgs(BaseModel):
     @classmethod
     def cap_to_cpu_count(cls, value: int) -> int:
         if value <= 0:
-            print(
-                "Error: Invalid value for --multiprocessing",
-                "Value must be >=1 ",
-                file=sys.stderr,
+            logging.error(
+                "Error: Invalid value for --multiprocessing. Value must be >=1."
             )
             sys.exit(1)
         cpu_count = os.cpu_count() or 1

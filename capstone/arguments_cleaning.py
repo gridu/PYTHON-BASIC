@@ -1,6 +1,7 @@
 import argparse
 import configparser
 import json
+import logging
 import sys
 from pathlib import Path
 
@@ -124,15 +125,13 @@ def get_clean_arguments(args: argparse.Namespace) -> CleanArgs:
                 with open(potential_file, "r", encoding="utf-8") as file:
                     args_dict["data_schema"] = json.load(file)
             except json.JSONDecodeError:
-                print(
-                    f"Error: The schema file '{schema_input}' does not contain valid JSON.",
-                    file=sys.stderr,
+                logging.error(
+                    f"Error: The schema file '{schema_input}' does not contain valid JSON."
                 )
                 sys.exit(1)
             except Exception as e:
-                print(
-                    f"Error: Failed to read schema file '{schema_input}': {e}",
-                    file=sys.stderr,
+                logging.error(
+                    f"Error: Failed to read schema file '{schema_input}': {e}"
                 )
                 sys.exit(1)
 
@@ -141,9 +140,8 @@ def get_clean_arguments(args: argparse.Namespace) -> CleanArgs:
             try:
                 args_dict["data_schema"] = json.loads(schema_input)
             except json.JSONDecodeError:
-                print(
-                    "Error: The --data_schema provided is neither a valid file path nor a valid JSON string.",
-                    file=sys.stderr,
+                logging.error(
+                    "Error: The --data_schema provided is neither a valid file path nor a valid JSON string."
                 )
                 sys.exit(1)
 
@@ -162,9 +160,6 @@ def get_clean_arguments(args: argparse.Namespace) -> CleanArgs:
                 else f"--{field_name}"
             )
 
-            print(
-                f"Error: Invalid value for {cli_flag}. {error_message}.",
-                file=sys.stderr,
-            )
+            logging.error(f"Error: Invalid value for {cli_flag}. {error_message}.")
 
         sys.exit(1)
