@@ -1,0 +1,136 @@
+# --- Python ---
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+# Pipfile.lock
+
+# PDM
+.pdm-python
+.pdm.toml
+
+# PEP 582
+__pypackages__/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.env.*
+!.env.example
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Type checkers
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+.ruff_cache/
+
+# Cython debug symbols
+cython_debug/
+
+# --- Editors / IDEs ---
+
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# --- OS ---
+
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# --- Project-specific generated outputs ---
+
+# Capstone data generator output
+capstone/output/*
+!capstone/output/.gitkeep
+
+# Practice task outputs (generated at runtime)
+practice/m5_additional_topics/parsing_serialization_task/result.xml
+practice/m6_web_scraping/output/*
+!practice/m6_web_scraping/output/.gitkeep
+practice/m7_concurrency/task1_fibonacci/output/*
+!practice/m7_concurrency/task1_fibonacci/output/.gitkeep
+practice/m7_concurrency/task2_apod_api/output/*
+!practice/m7_concurrency/task2_apod_api/output/.gitkeep
